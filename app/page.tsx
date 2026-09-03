@@ -138,12 +138,12 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Top Banner / Welcome Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-3 sm:pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold tracking-tight font-heading text-foreground">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight font-heading text-foreground">
               {isLeadGen
                 ? `Lead Generation Suite`
                 : isDeveloper
@@ -154,26 +154,26 @@ export default function DashboardPage() {
               variant="outline"
               className={
                 isAdmin
-                  ? 'border-purple-500/30 text-purple-600 bg-purple-500/10'
+                  ? 'border-purple-500/30 text-purple-600 bg-purple-500/10 text-[10px] sm:text-xs'
                   : isLeadGen
-                  ? 'border-emerald-500/30 text-emerald-600 bg-emerald-500/10'
-                  : 'border-blue-500/30 text-blue-600 bg-blue-500/10'
+                  ? 'border-emerald-500/30 text-emerald-600 bg-emerald-500/10 text-[10px] sm:text-xs'
+                  : 'border-blue-500/30 text-blue-600 bg-blue-500/10 text-[10px] sm:text-xs'
               }
             >
               {currentUser.role}
             </Badge>
           </div>
-          <p className="text-xs text-muted-foreground mt-0.5">
+          <p className="text-[11px] sm:text-xs text-muted-foreground mt-0.5">
             Logged in as <span className="font-medium text-foreground">{currentUser.name}</span> ({currentUser.title || currentUser.role})
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 flex-wrap">
           {isAdmin && (
             <Button
               size="sm"
               variant="outline"
-              className="h-8 text-xs gap-1.5"
+              className="h-7 sm:h-8 text-xs gap-1 sm:gap-1.5 px-2 sm:px-3"
               onClick={() => {
                 setActionType('client')
                 setQuickActionOpen(true)
@@ -188,7 +188,7 @@ export default function DashboardPage() {
             <Button
               size="sm"
               variant="outline"
-              className="h-8 text-xs gap-1.5"
+              className="h-7 sm:h-8 text-xs gap-1 sm:gap-1.5 px-2 sm:px-3"
               onClick={() => {
                 setActionType('lead')
                 setQuickActionOpen(true)
@@ -201,7 +201,7 @@ export default function DashboardPage() {
 
           <Button
             size="sm"
-            className="h-8 text-xs gap-1.5"
+            className="h-7 sm:h-8 text-xs gap-1 sm:gap-1.5 px-2 sm:px-3"
             onClick={() => {
               setActionType('task')
               setQuickActionOpen(true)
@@ -218,106 +218,106 @@ export default function DashboardPage() {
       {/* ======================================================== */}
       {isAdmin && (
         <>
-          {/* KPI Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* KPI Grid - 2x2 High Density on Mobile */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
             <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-xs font-medium text-muted-foreground">Total Revenue Collected</CardTitle>
-                <div className="h-8 w-8 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
-                  <DollarSign className="h-4 w-4" />
+              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-1 sm:pb-2 space-y-0">
+                <CardTitle className="text-[11px] sm:text-xs font-medium text-muted-foreground line-clamp-1">Total Revenue</CardTitle>
+                <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0">
+                  <DollarSign className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-foreground">
+              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+                <div className="text-lg sm:text-2xl font-bold text-foreground truncate">
                   ${metrics.totalRevenue.toLocaleString()}
                 </div>
-                <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+                <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1 flex items-center gap-1">
                   <span className="text-emerald-600 font-semibold flex items-center">
                     +18% <ArrowUpRight className="h-3 w-3" />
                   </span>
-                  vs last month
+                  <span className="hidden xs:inline">vs last mo</span>
                 </p>
               </CardContent>
             </Card>
 
             <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-xs font-medium text-muted-foreground">Active Clients & Projects</CardTitle>
-                <div className="h-8 w-8 rounded-lg bg-blue-500/10 text-blue-600 flex items-center justify-center">
-                  <FolderKanban className="h-4 w-4" />
+              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-1 sm:pb-2 space-y-0">
+                <CardTitle className="text-[11px] sm:text-xs font-medium text-muted-foreground line-clamp-1">Clients & Projects</CardTitle>
+                <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-blue-500/10 text-blue-600 flex items-center justify-center shrink-0">
+                  <FolderKanban className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-foreground">
+              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+                <div className="text-lg sm:text-2xl font-bold text-foreground truncate">
+                  {metrics.activeClientsCount} / {metrics.activeProjectsCount}
+                </div>
+                <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1 truncate">
                   {metrics.activeClientsCount} Clients • {metrics.activeProjectsCount} Active
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  All contracts on milestone track
                 </p>
               </CardContent>
             </Card>
 
             <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-xs font-medium text-muted-foreground">Unbilled Hours / Accrual</CardTitle>
-                <div className="h-8 w-8 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center">
-                  <Clock className="h-4 w-4" />
+              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-1 sm:pb-2 space-y-0">
+                <CardTitle className="text-[11px] sm:text-xs font-medium text-muted-foreground line-clamp-1">Unbilled Hours</CardTitle>
+                <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center shrink-0">
+                  <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-foreground">
+              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+                <div className="text-lg sm:text-2xl font-bold text-foreground truncate">
                   {metrics.unbilledHours} hrs
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Estimated value: <span className="font-semibold text-emerald-600">${Math.round(metrics.unbilledAmount)}</span>
+                <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1 truncate">
+                  Accrual: <span className="font-semibold text-emerald-600">${Math.round(metrics.unbilledAmount)}</span>
                 </p>
               </CardContent>
             </Card>
 
             <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-xs font-medium text-muted-foreground">Pipeline Deal Value</CardTitle>
-                <div className="h-8 w-8 rounded-lg bg-purple-500/10 text-purple-600 flex items-center justify-center">
-                  <Target className="h-4 w-4" />
+              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-1 sm:pb-2 space-y-0">
+                <CardTitle className="text-[11px] sm:text-xs font-medium text-muted-foreground line-clamp-1">Pipeline Value</CardTitle>
+                <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-purple-500/10 text-purple-600 flex items-center justify-center shrink-0">
+                  <Target className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-foreground">
+              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+                <div className="text-lg sm:text-2xl font-bold text-foreground truncate">
                   ${metrics.pipelineValue.toLocaleString()}
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Managed by Lead Gen Specialists
+                <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1 truncate">
+                  Active deal stages
                 </p>
               </CardContent>
             </Card>
           </div>
 
           {/* Main Content Grid: Chart + Urgent Tasks */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-6">
             {/* Revenue Velocity Chart */}
             <Card className="lg:col-span-2 min-w-0">
-              <CardHeader className="flex flex-row items-center justify-between pb-4">
+              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-2 sm:pb-4">
                 <div>
-                  <CardTitle className="text-base font-semibold">Financial Trajectory</CardTitle>
-                  <CardDescription className="text-xs">
+                  <CardTitle className="text-sm sm:text-base font-semibold">Financial Trajectory</CardTitle>
+                  <CardDescription className="text-[11px] sm:text-xs">
                     Monthly billed vs collected revenue (USD)
                   </CardDescription>
                 </div>
-                <div className="flex items-center gap-3 text-xs">
-                  <div className="flex items-center gap-1.5">
-                    <span className="h-2.5 w-2.5 rounded-full bg-primary" />
+                <div className="flex items-center gap-2 sm:gap-3 text-[11px] sm:text-xs">
+                  <div className="flex items-center gap-1 sm:gap-1.5">
+                    <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-primary" />
                     <span className="text-muted-foreground">Collected</span>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="h-2.5 w-2.5 rounded-full bg-blue-400" />
+                  <div className="flex items-center gap-1 sm:gap-1.5">
+                    <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-blue-400" />
                     <span className="text-muted-foreground">Billed</span>
                   </div>
                 </div>
               </CardHeader>
-              <CardContent>
-                <div className="w-full min-w-0 h-[260px]">
-                  <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={200}>
-                    <AreaChart data={metrics.monthlyRevenueData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+              <CardContent className="p-2 sm:p-6 pt-0 sm:pt-0">
+                <div className="w-full min-w-0 h-[200px] sm:h-[260px]">
+                  <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={180}>
+                    <AreaChart data={metrics.monthlyRevenueData} margin={{ top: 10, right: 5, left: -15, bottom: 0 }}>
                       <defs>
                         <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="5%" stopColor="var(--color-primary, #6366f1)" stopOpacity={0.4} />
@@ -325,8 +325,8 @@ export default function DashboardPage() {
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" opacity={0.15} />
-                      <XAxis dataKey="month" tick={{ fontSize: 12 }} stroke="#888888" />
-                      <YAxis tick={{ fontSize: 12 }} stroke="#888888" tickFormatter={(v) => `$${v}`} />
+                      <XAxis dataKey="month" tick={{ fontSize: 10 }} stroke="#888888" />
+                      <YAxis tick={{ fontSize: 10 }} stroke="#888888" tickFormatter={(v) => `$${v}`} width={38} />
                       <RechartsTooltip
                         formatter={(value: any) => [`$${value.toLocaleString()}`, '']}
                         contentStyle={{
@@ -425,121 +425,121 @@ export default function DashboardPage() {
       {/* ======================================================== */}
       {isLeadGen && (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
             <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-xs font-medium text-muted-foreground">Pipeline Deal Value</CardTitle>
-                <div className="h-8 w-8 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
-                  <Target className="h-4 w-4" />
+              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-1 sm:pb-2 space-y-0">
+                <CardTitle className="text-[11px] sm:text-xs font-medium text-muted-foreground line-clamp-1">Pipeline Value</CardTitle>
+                <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0">
+                  <Target className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-foreground">
+              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+                <div className="text-lg sm:text-2xl font-bold text-foreground truncate">
                   ${metrics.pipelineValue.toLocaleString()}
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1 truncate">
                   Active potential contracts
                 </p>
               </CardContent>
             </Card>
 
             <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-xs font-medium text-muted-foreground">Leads in Pipeline</CardTitle>
-                <div className="h-8 w-8 rounded-lg bg-blue-500/10 text-blue-600 flex items-center justify-center">
-                  <Users className="h-4 w-4" />
+              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-1 sm:pb-2 space-y-0">
+                <CardTitle className="text-[11px] sm:text-xs font-medium text-muted-foreground line-clamp-1">Pipeline Leads</CardTitle>
+                <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-blue-500/10 text-blue-600 flex items-center justify-center shrink-0">
+                  <Users className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-foreground">
+              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+                <div className="text-lg sm:text-2xl font-bold text-foreground truncate">
                   {metrics.totalLeadsCount || 4} Leads
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1 truncate">
                   Across 6 deal stages
                 </p>
               </CardContent>
             </Card>
 
             <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-xs font-medium text-muted-foreground">My Lead Tasks</CardTitle>
-                <div className="h-8 w-8 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center">
-                  <CheckSquare className="h-4 w-4" />
+              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-1 sm:pb-2 space-y-0">
+                <CardTitle className="text-[11px] sm:text-xs font-medium text-muted-foreground line-clamp-1">My Lead Tasks</CardTitle>
+                <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center shrink-0">
+                  <CheckSquare className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-foreground">
+              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+                <div className="text-lg sm:text-2xl font-bold text-foreground truncate">
                   {metrics.myAssignedTasksCount || 2} Tasks
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Outreach & follow-ups assigned to you
+                <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1 truncate">
+                  Assigned follow-ups
                 </p>
               </CardContent>
             </Card>
 
             <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-xs font-medium text-muted-foreground">Lead Conversion Rate</CardTitle>
-                <div className="h-8 w-8 rounded-lg bg-purple-500/10 text-purple-600 flex items-center justify-center">
-                  <Sparkles className="h-4 w-4" />
+              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-1 sm:pb-2 space-y-0">
+                <CardTitle className="text-[11px] sm:text-xs font-medium text-muted-foreground line-clamp-1">Conversion Rate</CardTitle>
+                <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-purple-500/10 text-purple-600 flex items-center justify-center shrink-0">
+                  <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-foreground">
+              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+                <div className="text-lg sm:text-2xl font-bold text-foreground truncate">
                   25.0%
                 </div>
-                <p className="text-xs text-muted-foreground mt-1 text-emerald-600 font-semibold">
-                  1-click Lead to Client Conversion
+                <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1 text-emerald-600 font-semibold truncate">
+                  1-click conversion
                 </p>
               </CardContent>
             </Card>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-6">
             <Card className="lg:col-span-2">
-              <CardHeader className="flex flex-row items-center justify-between pb-3">
+              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-2 sm:pb-3">
                 <div>
-                  <CardTitle className="text-base font-semibold">Sales Pipeline Board</CardTitle>
-                  <CardDescription className="text-xs">
+                  <CardTitle className="text-sm sm:text-base font-semibold">Sales Pipeline Board</CardTitle>
+                  <CardDescription className="text-[11px] sm:text-xs">
                     Quick link to Kanban stages, follow-ups, and screenshots
                   </CardDescription>
                 </div>
                 <Link href="/leads">
-                  <Button size="sm" className="h-8 text-xs gap-1.5">
-                    Open Pipeline <ArrowRight className="h-3.5 w-3.5" />
+                  <Button size="sm" className="h-7 sm:h-8 text-xs gap-1 sm:gap-1.5 px-2.5 sm:px-3">
+                    Open <ArrowRight className="h-3.5 w-3.5" />
                   </Button>
                 </Link>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="p-4 rounded-xl border bg-muted/20 flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <div className="space-y-1">
-                    <div className="font-semibold text-sm text-foreground">Lead Interaction & Activity Tracker</div>
-                    <p className="text-xs text-muted-foreground">
-                      Log messages sent, client replies, schedule next follow-up dates, and upload screenshot images of emails or DMs.
+              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0 space-y-3 sm:space-y-4">
+                <div className="p-3 sm:p-4 rounded-xl border bg-muted/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                  <div className="space-y-0.5 sm:space-y-1">
+                    <div className="font-semibold text-xs sm:text-sm text-foreground">Lead Interaction & Activity Tracker</div>
+                    <p className="text-[11px] sm:text-xs text-muted-foreground">
+                      Log messages sent, client replies, schedule next follow-up dates, and upload screenshot images.
                     </p>
                   </div>
-                  <Link href="/leads">
-                    <Button variant="outline" size="sm" className="text-xs shrink-0 gap-1.5">
-                      <MessageSquare className="h-3.5 w-3.5" /> View Follow-up Logs
+                  <Link href="/leads" className="w-full sm:w-auto">
+                    <Button variant="outline" size="sm" className="text-xs shrink-0 gap-1.5 w-full sm:w-auto h-8">
+                      <MessageSquare className="h-3.5 w-3.5" /> View Follow-ups
                     </Button>
                   </Link>
                 </div>
 
                 <div className="space-y-2">
-                  <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  <div className="text-[11px] sm:text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     My Outreach Tasks
                   </div>
                   {metrics.urgentTasks.map((t) => (
-                    <div key={t.id} className="flex items-center justify-between p-3 rounded-lg border bg-card">
-                      <div className="flex items-center gap-2.5">
-                        <button onClick={() => toggleTaskDone(t.id, t.status)}>
+                    <div key={t.id} className="flex items-center justify-between p-2.5 sm:p-3 rounded-lg border bg-card gap-2">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <button onClick={() => toggleTaskDone(t.id, t.status)} className="shrink-0">
                           <CheckSquare className={`h-4 w-4 ${t.status === 'DONE' ? 'text-primary' : 'text-muted-foreground'}`} />
                         </button>
-                        <span className={`text-xs font-medium ${t.status === 'DONE' ? 'line-through text-muted-foreground' : ''}`}>
+                        <span className={`text-xs font-medium truncate ${t.status === 'DONE' ? 'line-through text-muted-foreground' : ''}`}>
                           {t.title}
                         </span>
                       </div>
-                      <Badge variant="outline" className="text-[10px]">{t.priority}</Badge>
+                      <Badge variant="outline" className="text-[9px] sm:text-[10px] shrink-0">{t.priority}</Badge>
                     </div>
                   ))}
                 </div>
@@ -547,20 +547,22 @@ export default function DashboardPage() {
             </Card>
 
             <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base font-semibold">Recent Lead Activity</CardTitle>
-                <CardDescription className="text-xs">Latest team follow-ups & stage changes</CardDescription>
+              <CardHeader className="p-3 sm:p-6 pb-2 sm:pb-3">
+                <CardTitle className="text-sm sm:text-base font-semibold">Recent Prospect Activities</CardTitle>
+                <CardDescription className="text-[11px] sm:text-xs">
+                  Latest client notes, calls & touchpoints
+                </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-3">
-                {metrics.recentActivities.map((act) => (
-                  <div key={act.id} className="text-xs p-2.5 rounded-lg border bg-muted/20 space-y-1">
-                    <div className="flex items-center justify-between">
-                      <span className="font-semibold text-foreground">{act.action}</span>
-                      <span className="text-[10px] text-muted-foreground">
+              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0 space-y-2.5">
+                {metrics.recentActivities.slice(0, 5).map((act) => (
+                  <div key={act.id} className="p-2.5 rounded-lg border bg-muted/20 space-y-1 text-xs">
+                    <div className="flex items-center justify-between gap-1">
+                      <span className="font-semibold text-foreground truncate">{act.action}</span>
+                      <span className="text-[10px] text-muted-foreground shrink-0 font-mono">
                         {new Date(act.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </span>
                     </div>
-                    <p className="text-muted-foreground">{act.details}</p>
+                    <p className="text-[11px] text-muted-foreground line-clamp-2">{act.details}</p>
                   </div>
                 ))}
               </CardContent>
@@ -574,89 +576,89 @@ export default function DashboardPage() {
       {/* ======================================================== */}
       {isDeveloper && (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
             <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-xs font-medium text-muted-foreground">My Assigned Projects</CardTitle>
-                <div className="h-8 w-8 rounded-lg bg-blue-500/10 text-blue-600 flex items-center justify-center">
-                  <FolderKanban className="h-4 w-4" />
+              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-1 sm:pb-2 space-y-0">
+                <CardTitle className="text-[11px] sm:text-xs font-medium text-muted-foreground line-clamp-1">My Projects</CardTitle>
+                <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-blue-500/10 text-blue-600 flex items-center justify-center shrink-0">
+                  <FolderKanban className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-foreground">
+              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+                <div className="text-lg sm:text-2xl font-bold text-foreground truncate">
                   {metrics.myAssignedProjectsCount || 2} Projects
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Assigned by Agency Founder
+                <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1 truncate">
+                  Assigned scope
                 </p>
               </CardContent>
             </Card>
 
             <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-xs font-medium text-muted-foreground">My Active Tasks</CardTitle>
-                <div className="h-8 w-8 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center">
-                  <CheckSquare className="h-4 w-4" />
+              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-1 sm:pb-2 space-y-0">
+                <CardTitle className="text-[11px] sm:text-xs font-medium text-muted-foreground line-clamp-1">Active Tasks</CardTitle>
+                <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center shrink-0">
+                  <CheckSquare className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-foreground">
+              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+                <div className="text-lg sm:text-2xl font-bold text-foreground truncate">
                   {metrics.myAssignedTasksCount || 2} Tasks
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Ready for development
+                <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1 truncate">
+                  In progress
                 </p>
               </CardContent>
             </Card>
 
             <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-xs font-medium text-muted-foreground">Task Work Tracker</CardTitle>
-                <div className="h-8 w-8 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
-                  <Clock className="h-4 w-4" />
+              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-1 sm:pb-2 space-y-0">
+                <CardTitle className="text-[11px] sm:text-xs font-medium text-muted-foreground line-clamp-1">Work Tracker</CardTitle>
+                <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0">
+                  <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-foreground font-mono">
+              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+                <div className="text-lg sm:text-2xl font-bold text-foreground font-mono truncate">
                   {formatTimer(seconds)}
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Auto-logs start & complete times
+                <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1 truncate">
+                  Auto-logged time
                 </p>
               </CardContent>
             </Card>
 
             <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-xs font-medium text-muted-foreground">Hourly Billing Rate</CardTitle>
-                <div className="h-8 w-8 rounded-lg bg-purple-500/10 text-purple-600 flex items-center justify-center">
-                  <Code2 className="h-4 w-4" />
+              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-1 sm:pb-2 space-y-0">
+                <CardTitle className="text-[11px] sm:text-xs font-medium text-muted-foreground line-clamp-1">Hourly Rate</CardTitle>
+                <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-purple-500/10 text-purple-600 flex items-center justify-center shrink-0">
+                  <Code2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-foreground">
+              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+                <div className="text-lg sm:text-2xl font-bold text-foreground truncate">
                   ${currentUser.hourlyRate || 95}/hr
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Engineer Tier: Senior
+                <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1 truncate">
+                  Tier: Senior Engineer
                 </p>
               </CardContent>
             </Card>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-6">
             {/* My Tasks with Start & Complete Action */}
             <Card className="lg:col-span-2">
-              <CardHeader className="flex flex-row items-center justify-between pb-3">
+              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-2 sm:pb-3">
                 <div>
-                  <CardTitle className="text-base font-semibold">My Assigned Tasks</CardTitle>
-                  <CardDescription className="text-xs">
+                  <CardTitle className="text-sm sm:text-base font-semibold">My Assigned Tasks</CardTitle>
+                  <CardDescription className="text-[11px] sm:text-xs">
                     Start working, track time, and checkmark when complete
                   </CardDescription>
                 </div>
                 <Link href="/tasks">
-                  <Button size="sm" variant="outline" className="h-8 text-xs gap-1.5">
-                    View Task Board <ArrowRight className="h-3 w-3" />
+                  <Button size="sm" variant="outline" className="h-7 sm:h-8 text-xs gap-1 sm:gap-1.5 px-2.5 sm:px-3">
+                    Board <ArrowRight className="h-3 w-3" />
                   </Button>
                 </Link>
               </CardHeader>

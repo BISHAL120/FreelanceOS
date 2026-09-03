@@ -109,40 +109,40 @@ export default function ClientDetailPage() {
             </div>
 
             {/* Quick Financial Highlight */}
-            <div className="flex items-center gap-4 bg-muted/40 p-3 rounded-xl border text-xs">
+            <div className="grid grid-cols-3 gap-2 bg-muted/40 p-2.5 sm:p-3 rounded-xl border text-xs">
               <div>
                 <span className="text-[10px] text-muted-foreground block font-medium">Hourly Rate</span>
-                <span className="text-base font-bold text-foreground">${client.defaultRate}/hr</span>
+                <span className="text-sm sm:text-base font-bold text-foreground">${client.defaultRate}/hr</span>
               </div>
-              <div className="border-l pl-4">
+              <div className="border-l pl-2 sm:pl-4">
                 <span className="text-[10px] text-muted-foreground block font-medium">Total Paid</span>
-                <span className="text-base font-bold text-emerald-600">${totalPaid.toLocaleString()}</span>
+                <span className="text-sm sm:text-base font-bold text-emerald-600 truncate block">${totalPaid.toLocaleString()}</span>
               </div>
-              <div className="border-l pl-4">
+              <div className="border-l pl-2 sm:pl-4">
                 <span className="text-[10px] text-muted-foreground block font-medium">Logged Time</span>
-                <span className="text-base font-bold text-foreground">{totalHoursLogged} hrs</span>
+                <span className="text-sm sm:text-base font-bold text-foreground truncate block">{totalHoursLogged} hrs</span>
               </div>
             </div>
           </div>
 
           {/* Contact Details Bar */}
-          <div className="mt-6 pt-4 border-t flex flex-wrap items-center gap-6 text-xs text-muted-foreground">
+          <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t flex flex-wrap items-center gap-3 sm:gap-6 text-xs text-muted-foreground">
             <div className="flex items-center gap-1.5">
-              <Mail className="h-3.5 w-3.5 text-muted-foreground" />
-              <a href={`mailto:${client.email}`} className="hover:underline text-foreground">
+              <Mail className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+              <a href={`mailto:${client.email}`} className="hover:underline text-foreground truncate">
                 {client.email}
               </a>
             </div>
             {client.phone && (
               <div className="flex items-center gap-1.5">
-                <Phone className="h-3.5 w-3.5 text-muted-foreground" />
+                <Phone className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
                 <span>{client.phone}</span>
               </div>
             )}
             {client.website && (
               <div className="flex items-center gap-1.5">
-                <Globe className="h-3.5 w-3.5 text-muted-foreground" />
-                <a href={client.website} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-1 text-foreground">
+                <Globe className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                <a href={client.website} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-1 text-foreground truncate">
                   {client.website.replace(/^https?:\/\//, '')}
                   <ExternalLink className="h-2.5 w-2.5" />
                 </a>
@@ -150,7 +150,7 @@ export default function ClientDetailPage() {
             )}
             {client.address && (
               <div className="flex items-center gap-1.5">
-                <MapPin className="h-3.5 w-3.5 text-muted-foreground" />
+                <MapPin className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
                 <span>{client.address}</span>
               </div>
             )}
@@ -160,11 +160,11 @@ export default function ClientDetailPage() {
 
       {/* Tabs Workspace */}
       <Tabs defaultValue="projects" className="w-full">
-        <TabsList className="grid grid-cols-4 w-full max-w-md">
-          <TabsTrigger value="projects">Projects ({projects.length})</TabsTrigger>
-          <TabsTrigger value="invoices">Invoices ({invoices.length})</TabsTrigger>
-          <TabsTrigger value="tasks">Tasks ({tasks.length})</TabsTrigger>
-          <TabsTrigger value="time">Time Logs</TabsTrigger>
+        <TabsList className="grid grid-cols-4 w-full max-w-md h-auto p-1">
+          <TabsTrigger value="projects" className="text-[10px] sm:text-xs py-1.5 px-0.5 sm:px-2">Projects ({projects.length})</TabsTrigger>
+          <TabsTrigger value="invoices" className="text-[10px] sm:text-xs py-1.5 px-0.5 sm:px-2">Invoices ({invoices.length})</TabsTrigger>
+          <TabsTrigger value="tasks" className="text-[10px] sm:text-xs py-1.5 px-0.5 sm:px-2">Tasks ({tasks.length})</TabsTrigger>
+          <TabsTrigger value="time" className="text-[10px] sm:text-xs py-1.5 px-0.5 sm:px-2">Time Logs</TabsTrigger>
         </TabsList>
 
         {/* PROJECTS TAB */}

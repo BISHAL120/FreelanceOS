@@ -128,7 +128,7 @@ export default function TeamPage() {
       </div>
 
       {/* RBAC Permission Matrix Explainer */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-4">
         <Card className="p-4 bg-purple-500/5 border-purple-500/20">
           <div className="flex items-center gap-2 mb-2">
             <ShieldCheck className="h-5 w-5 text-purple-600" />
@@ -161,7 +161,7 @@ export default function TeamPage() {
       </div>
 
       {/* Team Members List */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-4">
         {users.map((member) => {
           const isCurrent = member.id === currentUser.id
           return (
@@ -221,7 +221,7 @@ export default function TeamPage() {
 
       {/* Add Member Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="w-[95vw] sm:max-w-md max-h-[90vh] overflow-y-auto p-4 sm:p-6">
           <DialogHeader>
             <DialogTitle>Add New Team Member</DialogTitle>
             <DialogDescription className="text-xs">

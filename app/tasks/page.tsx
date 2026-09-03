@@ -401,6 +401,7 @@ export default function TasksPage() {
   const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null)
   const [dragOverColumn, setDragOverColumn] = useState<TaskStatus | null>(null)
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
+  const [mobileColumn, setMobileColumn] = useState<TaskStatus | 'ALL'>('ALL')
 
   const draggedTask = useMemo(
     () => tasks.find((t) => t.id === draggedTaskId) || null,
@@ -833,37 +834,37 @@ export default function TasksPage() {
       </div>
 
       {/* Summary KPI Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-3 rounded-lg border border-border bg-card">
-          <span className="text-[11px] text-muted-foreground block font-medium">Sprint Backlog</span>
-          <div className="text-xl font-semibold mt-0.5 text-foreground font-mono">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+        <div className="p-2.5 sm:p-3 rounded-lg border border-border bg-card">
+          <span className="text-[10px] sm:text-[11px] text-muted-foreground block font-medium">Sprint Backlog</span>
+          <div className="text-lg sm:text-xl font-semibold mt-0.5 text-foreground font-mono">
             {tasks.filter((t) => t.status === 'TODO').length}
           </div>
-          <span className="text-[10px] text-muted-foreground">Tasks waiting to start</span>
+          <span className="text-[10px] text-muted-foreground">Waiting to start</span>
         </div>
 
-        <div className="p-3 rounded-lg border border-border bg-card">
-          <span className="text-[11px] text-muted-foreground block font-medium">In Progress</span>
-          <div className="text-xl font-semibold mt-0.5 text-foreground font-mono">
+        <div className="p-2.5 sm:p-3 rounded-lg border border-border bg-card">
+          <span className="text-[10px] sm:text-[11px] text-muted-foreground block font-medium">In Progress</span>
+          <div className="text-lg sm:text-xl font-semibold mt-0.5 text-foreground font-mono">
             {inProgressCount}
           </div>
-          <span className="text-[10px] text-muted-foreground">Currently being coded</span>
+          <span className="text-[10px] text-muted-foreground">Currently active</span>
         </div>
 
-        <div className="p-3 rounded-lg border border-border bg-card">
-          <span className="text-[11px] text-muted-foreground block font-medium">In Review</span>
-          <div className="text-xl font-semibold mt-0.5 text-foreground font-mono">
+        <div className="p-2.5 sm:p-3 rounded-lg border border-border bg-card">
+          <span className="text-[10px] sm:text-[11px] text-muted-foreground block font-medium">In Review</span>
+          <div className="text-lg sm:text-xl font-semibold mt-0.5 text-foreground font-mono">
             {tasks.filter((t) => t.status === 'REVIEW').length}
           </div>
-          <span className="text-[10px] text-muted-foreground">Pending QA & approval</span>
+          <span className="text-[10px] text-muted-foreground">Pending QA</span>
         </div>
 
-        <div className="p-3 rounded-lg border border-border bg-card">
-          <span className="text-[11px] text-muted-foreground block font-medium">Remaining Workload</span>
-          <div className="text-xl font-semibold mt-0.5 text-foreground font-mono">
+        <div className="p-2.5 sm:p-3 rounded-lg border border-border bg-card">
+          <span className="text-[10px] sm:text-[11px] text-muted-foreground block font-medium">Workload</span>
+          <div className="text-lg sm:text-xl font-semibold mt-0.5 text-foreground font-mono">
             {totalEstHours}h
           </div>
-          <span className="text-[10px] text-muted-foreground">{completedCount} tasks completed</span>
+          <span className="text-[10px] text-muted-foreground">{completedCount} tasks done</span>
         </div>
       </div>
 
@@ -959,7 +960,34 @@ export default function TasksPage() {
       {/* 1. KANBAN SPRINT BOARD VIEW                              */}
       {/* ======================================================== */}
       {viewMode === 'kanban' && (
-        <div className="flex gap-3 overflow-x-auto pb-4 pt-1 items-start min-h-[calc(100vh-320px)]">
+        <div className="space-y-2.5">
+          {/* Mobile Column Segmented Switcher */}
+          <div className="flex sm:hidden items-center gap-1 overflow-x-auto pb-1 no-scrollbar">
+            <Button
+              size="sm"
+              variant={mobileColumn === 'ALL' ? 'default' : 'outline'}
+              className="h-7 px-2.5 text-xs rounded-full shrink-0"
+              onClick={() => setMobileColumn('ALL')}
+            >
+              All Columns
+            </Button>
+            {TASK_COLUMNS.map((col) => {
+              const count = filteredTasks.filter((t) => t.status === col.status).length
+              return (
+                <Button
+                  key={col.status}
+                  size="sm"
+                  variant={mobileColumn === col.status ? 'default' : 'outline'}
+                  className="h-7 px-2.5 text-xs rounded-full shrink-0"
+                  onClick={() => setMobileColumn(col.status)}
+                >
+                  {col.label} ({count})
+                </Button>
+              )
+            })}
+          </div>
+
+          <div className="flex gap-2.5 sm:gap-3 overflow-x-auto pb-4 pt-1 items-start min-h-[calc(100vh-320px)] snap-x snap-mandatory px-0.5">
           {TASK_COLUMNS.map((col) => {
             const colTasks = filteredTasks
               .filter((t) => t.status === col.status)
@@ -981,7 +1009,13 @@ export default function TasksPage() {
                     }
                   }
                 }}
-                className={`w-[290px] min-w-[290px] max-w-[290px] shrink-0 flex flex-col rounded-lg border transition-all ${
+                className={`shrink-0 flex flex-col rounded-lg border transition-all ${
+                  mobileColumn !== 'ALL' && mobileColumn !== col.status ? 'hidden sm:flex' : 'flex'
+                } ${
+                  mobileColumn !== 'ALL' && mobileColumn === col.status
+                    ? 'w-full sm:w-[290px] min-w-0 sm:min-w-[290px]'
+                    : 'w-[86vw] sm:w-[290px] min-w-[86vw] sm:min-w-[290px] max-w-[340px] sm:max-w-[290px] snap-center'
+                } ${
                   isDropTarget
                     ? 'border-primary/50 bg-primary/5 shadow-xs ring-1 ring-primary/20'
                     : 'border-border bg-muted/20'
@@ -1090,6 +1124,7 @@ export default function TasksPage() {
               </div>
             )
           })}
+          </div>
         </div>
       )}
 
@@ -1209,7 +1244,7 @@ export default function TasksPage() {
       {/* 3. NEW TASK CREATION DIALOG                              */}
       {/* ======================================================== */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="w-[95vw] sm:max-w-md max-h-[90vh] overflow-y-auto p-4 sm:p-6">
           <DialogHeader>
             <DialogTitle className="text-base font-semibold">Create Sprint Task</DialogTitle>
             <DialogDescription className="text-xs">
@@ -1346,7 +1381,7 @@ export default function TasksPage() {
       {/* ======================================================== */}
       {editingTask && (
         <Dialog open={detailOpen} onOpenChange={setDetailOpen}>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="w-[95vw] sm:max-w-lg max-h-[90vh] overflow-y-auto p-4 sm:p-6">
             <DialogHeader>
               <div className="flex items-center justify-between pr-6">
                 <DialogTitle className="text-base font-semibold">Task Inspector</DialogTitle>

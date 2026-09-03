@@ -473,51 +473,51 @@ export default function ProjectsPage() {
       </div>
 
       {/* Financial Lifecycle KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-1.5 sm:gap-4">
         <Card className="bg-card shadow-xs border">
-          <CardContent className="p-4 flex items-center justify-between">
+          <CardContent className="p-2.5 sm:p-4 flex items-center justify-between">
             <div>
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Total Contract Portfolio
+              <p className="text-[10px] sm:text-xs font-semibold text-muted-foreground uppercase tracking-wider truncate">
+                Contract Portfolio
               </p>
-              <h2 className="text-2xl font-bold mt-1 text-foreground font-mono">
+              <h2 className="text-base sm:text-2xl font-bold mt-0.5 sm:mt-1 text-foreground font-mono truncate">
                 ${totalBudget.toLocaleString()}
               </h2>
             </div>
-            <div className="h-10 w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-              <FolderKanban className="h-5 w-5" />
+            <div className="h-7 w-7 sm:h-10 sm:w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+              <FolderKanban className="h-4 w-4 sm:h-5 sm:w-5" />
             </div>
           </CardContent>
         </Card>
 
         <Card className="bg-card shadow-xs border">
-          <CardContent className="p-4 flex items-center justify-between">
+          <CardContent className="p-2.5 sm:p-4 flex items-center justify-between">
             <div>
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Deposits & Milestones Paid
+              <p className="text-[10px] sm:text-xs font-semibold text-muted-foreground uppercase tracking-wider truncate">
+                Deposits & Paid
               </p>
-              <h2 className="text-2xl font-bold mt-1 text-emerald-600 font-mono">
+              <h2 className="text-base sm:text-2xl font-bold mt-0.5 sm:mt-1 text-emerald-600 font-mono truncate">
                 ${totalCollected.toLocaleString()}
               </h2>
             </div>
-            <div className="h-10 w-10 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
-              <CreditCard className="h-5 w-5" />
+            <div className="h-7 w-7 sm:h-10 sm:w-10 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0">
+              <CreditCard className="h-4 w-4 sm:h-5 sm:w-5" />
             </div>
           </CardContent>
         </Card>
 
         <Card className="bg-card shadow-xs border">
-          <CardContent className="p-4 flex items-center justify-between">
+          <CardContent className="p-2.5 sm:p-4 flex items-center justify-between">
             <div>
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Balance Remaining To Collect
+              <p className="text-[10px] sm:text-xs font-semibold text-muted-foreground uppercase tracking-wider truncate">
+                Balance To Collect
               </p>
-              <h2 className="text-2xl font-bold mt-1 text-blue-600 font-mono">
+              <h2 className="text-base sm:text-2xl font-bold mt-0.5 sm:mt-1 text-blue-600 font-mono truncate">
                 ${balanceRemaining.toLocaleString()}
               </h2>
             </div>
-            <div className="h-10 w-10 rounded-lg bg-blue-500/10 text-blue-600 flex items-center justify-center">
-              <TrendingUp className="h-5 w-5" />
+            <div className="h-7 w-7 sm:h-10 sm:w-10 rounded-lg bg-blue-500/10 text-blue-600 flex items-center justify-center shrink-0">
+              <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
             </div>
           </CardContent>
         </Card>
@@ -731,7 +731,7 @@ export default function ProjectsPage() {
       {/* ======================================================== */}
       {selectedProject && (
         <Dialog open={!!selectedProject} onOpenChange={(open) => !open && setSelectedProject(null)}>
-          <DialogContent className="max-w-4xl max-h-[92vh] overflow-y-auto">
+          <DialogContent className="w-[95vw] sm:max-w-4xl max-h-[92vh] overflow-y-auto p-3 sm:p-6">
             <DialogHeader className="border-b pb-4">
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 pr-6">
                 <div>
@@ -1201,7 +1201,7 @@ export default function ProjectsPage() {
       {/* ======================================================== */}
       {payingMilestone && (
         <Dialog open={paymentDialogOpen} onOpenChange={setPaymentDialogOpen}>
-          <DialogContent className="max-w-md">
+          <DialogContent className="w-[95vw] sm:max-w-md max-h-[90vh] overflow-y-auto p-4 sm:p-6">
             <DialogHeader>
               <DialogTitle>Record Milestone Payment Received</DialogTitle>
               <DialogDescription className="text-xs">
@@ -1277,7 +1277,7 @@ export default function ProjectsPage() {
       {/* ======================================================== */}
       {selectedProject && (
         <Dialog open={downpaymentDialogOpen} onOpenChange={setDownpaymentDialogOpen}>
-          <DialogContent className="max-w-md">
+          <DialogContent className="w-[95vw] sm:max-w-md max-h-[90vh] overflow-y-auto p-4 sm:p-6">
             <DialogHeader>
               <DialogTitle>Record Upfront Downpayment Deposit</DialogTitle>
               <DialogDescription className="text-xs">
@@ -1341,7 +1341,7 @@ export default function ProjectsPage() {
       {/* NEW PROJECT DIALOG (FIXED PRICE + DOWNPAYMENT OPTIONS)    */}
       {/* ======================================================== */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-lg max-h-[92vh] overflow-y-auto">
+        <DialogContent className="w-[95vw] sm:max-w-lg max-h-[92vh] overflow-y-auto p-4 sm:p-6">
           <DialogHeader>
             <DialogTitle>Create New Project</DialogTitle>
             <DialogDescription className="text-xs">

@@ -238,35 +238,35 @@ export default function LeadsPage() {
         </div>
       </div>
 
-      {/* Summary Stats - Simple & Clean */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <div className="p-3.5 rounded-lg border border-border bg-card">
-          <span className="text-[11px] text-muted-foreground block font-medium">Pipeline Value</span>
-          <div className="text-xl font-semibold mt-0.5 text-foreground font-mono">
+      {/* Summary Stats - Compact 3-Column on Mobile */}
+      <div className="grid grid-cols-3 gap-1.5 sm:gap-3">
+        <div className="p-2 sm:p-3.5 rounded-lg border border-border bg-card">
+          <span className="text-[10px] sm:text-[11px] text-muted-foreground block font-medium">Pipeline Value</span>
+          <div className="text-base sm:text-xl font-semibold mt-0.5 text-foreground font-mono truncate">
             ${totalPipeline.toLocaleString()}
           </div>
-          <span className="text-[11px] text-muted-foreground">{activeDeals} active prospects</span>
+          <span className="text-[9px] sm:text-[11px] text-muted-foreground truncate block">{activeDeals} active</span>
         </div>
 
-        <div className="p-3.5 rounded-lg border border-border bg-card">
-          <span className="text-[11px] text-muted-foreground block font-medium">Closed Won</span>
-          <div className="text-xl font-semibold mt-0.5 text-foreground font-mono">
+        <div className="p-2 sm:p-3.5 rounded-lg border border-border bg-card">
+          <span className="text-[10px] sm:text-[11px] text-muted-foreground block font-medium">Closed Won</span>
+          <div className="text-base sm:text-xl font-semibold mt-0.5 text-foreground font-mono truncate">
             ${wonValue.toLocaleString()}
           </div>
-          <span className="text-[11px] text-muted-foreground">{wonDeals} deals converted</span>
+          <span className="text-[9px] sm:text-[11px] text-muted-foreground truncate block">{wonDeals} won</span>
         </div>
 
-        <div className="p-3.5 rounded-lg border border-border bg-card">
-          <span className="text-[11px] text-muted-foreground block font-medium">Win Rate</span>
-          <div className="text-xl font-semibold mt-0.5 text-foreground font-mono">
+        <div className="p-2 sm:p-3.5 rounded-lg border border-border bg-card">
+          <span className="text-[10px] sm:text-[11px] text-muted-foreground block font-medium">Win Rate</span>
+          <div className="text-base sm:text-xl font-semibold mt-0.5 text-foreground font-mono truncate">
             {leads.length > 0 ? Math.round((wonDeals / leads.length) * 100) : 0}%
           </div>
-          <span className="text-[11px] text-muted-foreground">{leads.length} total leads recorded</span>
+          <span className="text-[9px] sm:text-[11px] text-muted-foreground truncate block">{leads.length} total</span>
         </div>
       </div>
 
       {/* Filter Bar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
         <div className="relative flex-1 max-w-sm">
           <Search className="h-3.5 w-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -277,9 +277,9 @@ export default function LeadsPage() {
           />
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 flex-wrap">
           <Select value={stageFilter} onValueChange={(v) => v && setStageFilter(v)}>
-            <SelectTrigger className="h-8 text-xs w-[130px]">
+            <SelectTrigger className="h-8 text-xs w-[120px] sm:w-[130px]">
               <SelectValue placeholder="All Stages" />
             </SelectTrigger>
             <SelectContent>
@@ -293,7 +293,7 @@ export default function LeadsPage() {
           </Select>
 
           <Select value={ownerFilter} onValueChange={(v) => v && setOwnerFilter(v)}>
-            <SelectTrigger className="h-8 text-xs w-[140px]">
+            <SelectTrigger className="h-8 text-xs w-[120px] sm:w-[140px]">
               <SelectValue placeholder="All Owners" />
             </SelectTrigger>
             <SelectContent>
@@ -323,11 +323,37 @@ export default function LeadsPage() {
         </div>
       </div>
 
+      {/* Mobile Stage Filter Pills */}
+      <div className="flex sm:hidden items-center gap-1 overflow-x-auto pb-1 no-scrollbar">
+        <Button
+          size="sm"
+          variant={stageFilter === 'ALL' ? 'default' : 'outline'}
+          className="h-7 px-2 text-xs rounded-full shrink-0"
+          onClick={() => setStageFilter('ALL')}
+        >
+          All Stages
+        </Button>
+        {STAGES.map((s) => {
+          const count = leads.filter((l) => l.stage === s.key).length
+          return (
+            <Button
+              key={s.key}
+              size="sm"
+              variant={stageFilter === s.key ? 'default' : 'outline'}
+              className="h-7 px-2 text-xs rounded-full shrink-0"
+              onClick={() => setStageFilter(s.key)}
+            >
+              {s.label} ({count})
+            </Button>
+          )
+        })}
+      </div>
+
       {/* ======================================================== */}
       {/* 1. KANBAN HORIZONTAL PIPELINE                            */}
       {/* ======================================================== */}
       {viewMode === 'kanban' && (
-        <div className="flex gap-3 overflow-x-auto pb-4 pt-1 items-start min-h-[calc(100vh-320px)]">
+        <div className="flex gap-2.5 sm:gap-3 overflow-x-auto pb-4 pt-1 items-start min-h-[calc(100vh-320px)] snap-x snap-mandatory px-0.5">
           {STAGES.map((stageItem) => {
             const stageLeads = filteredLeads.filter((l) => l.stage === stageItem.key)
             const stageTotal = stageLeads.reduce((acc, l) => acc + l.dealValue, 0)
@@ -335,7 +361,7 @@ export default function LeadsPage() {
             return (
               <div
                 key={stageItem.key}
-                className="w-[280px] shrink-0 flex flex-col rounded-lg border border-border bg-muted/20"
+                className="w-[85vw] sm:w-[280px] min-w-[85vw] sm:min-w-[280px] max-w-[320px] sm:max-w-[280px] shrink-0 snap-center flex flex-col rounded-lg border border-border bg-muted/20"
               >
                 {/* Column Header - Clean, No Thick Rainbow Borders */}
                 <div className="p-3 border-b border-border bg-card/50 flex items-center justify-between">
@@ -533,7 +559,7 @@ export default function LeadsPage() {
       {/* NEW PROSPECT DIALOG                                      */}
       {/* ======================================================== */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="w-[95vw] sm:max-w-md max-h-[90vh] overflow-y-auto p-4 sm:p-6">
           <DialogHeader>
             <DialogTitle className="text-base font-semibold">New Prospect</DialogTitle>
             <DialogDescription className="text-xs">

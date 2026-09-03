@@ -132,52 +132,52 @@ export function QuickActionDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[520px]">
+      <DialogContent className="w-[95vw] sm:max-w-[520px] max-h-[90vh] overflow-y-auto p-4 sm:p-6">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-xl font-semibold">
-            <Plus className="h-5 w-5 text-primary" /> Quick Create
+          <DialogTitle className="flex items-center gap-2 text-lg sm:text-xl font-semibold">
+            <Plus className="h-4 w-4 sm:h-5 sm:w-5 text-primary" /> Quick Create
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-xs">
             Instantly add records to your freelance workspace.
           </DialogDescription>
         </DialogHeader>
 
         {/* Tab Selection */}
-        <div className="grid grid-cols-5 gap-1 p-1 bg-muted rounded-lg text-xs font-medium">
+        <div className="grid grid-cols-5 gap-0.5 sm:gap-1 p-1 bg-muted rounded-lg text-[10px] sm:text-xs font-medium">
           <button
             type="button"
             onClick={() => setType('task')}
-            className={`flex flex-col items-center py-2 px-1 rounded-md transition ${type === 'task' ? 'bg-background shadow-xs text-foreground font-semibold' : 'text-muted-foreground hover:text-foreground'}`}
+            className={`flex flex-col items-center py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-md transition ${type === 'task' ? 'bg-background shadow-xs text-foreground font-semibold' : 'text-muted-foreground hover:text-foreground'}`}
           >
-            <CheckSquare className="h-4 w-4 mb-1" /> Task
+            <CheckSquare className="h-3.5 w-3.5 sm:h-4 sm:w-4 mb-0.5 sm:mb-1" /> Task
           </button>
           <button
             type="button"
             onClick={() => setType('lead')}
-            className={`flex flex-col items-center py-2 px-1 rounded-md transition ${type === 'lead' ? 'bg-background shadow-xs text-foreground font-semibold' : 'text-muted-foreground hover:text-foreground'}`}
+            className={`flex flex-col items-center py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-md transition ${type === 'lead' ? 'bg-background shadow-xs text-foreground font-semibold' : 'text-muted-foreground hover:text-foreground'}`}
           >
-            <Target className="h-4 w-4 mb-1" /> Lead
+            <Target className="h-3.5 w-3.5 sm:h-4 sm:w-4 mb-0.5 sm:mb-1" /> Lead
           </button>
           <button
             type="button"
             onClick={() => setType('client')}
-            className={`flex flex-col items-center py-2 px-1 rounded-md transition ${type === 'client' ? 'bg-background shadow-xs text-foreground font-semibold' : 'text-muted-foreground hover:text-foreground'}`}
+            className={`flex flex-col items-center py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-md transition ${type === 'client' ? 'bg-background shadow-xs text-foreground font-semibold' : 'text-muted-foreground hover:text-foreground'}`}
           >
-            <Users className="h-4 w-4 mb-1" /> Client
+            <Users className="h-3.5 w-3.5 sm:h-4 sm:w-4 mb-0.5 sm:mb-1" /> Client
           </button>
           <button
             type="button"
             onClick={() => setType('project')}
-            className={`flex flex-col items-center py-2 px-1 rounded-md transition ${type === 'project' ? 'bg-background shadow-xs text-foreground font-semibold' : 'text-muted-foreground hover:text-foreground'}`}
+            className={`flex flex-col items-center py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-md transition ${type === 'project' ? 'bg-background shadow-xs text-foreground font-semibold' : 'text-muted-foreground hover:text-foreground'}`}
           >
-            <FolderKanban className="h-4 w-4 mb-1" /> Project
+            <FolderKanban className="h-3.5 w-3.5 sm:h-4 sm:w-4 mb-0.5 sm:mb-1" /> Project
           </button>
           <button
             type="button"
             onClick={() => setType('invoice')}
-            className={`flex flex-col items-center py-2 px-1 rounded-md transition ${type === 'invoice' ? 'bg-background shadow-xs text-foreground font-semibold' : 'text-muted-foreground hover:text-foreground'}`}
+            className={`flex flex-col items-center py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-md transition ${type === 'invoice' ? 'bg-background shadow-xs text-foreground font-semibold' : 'text-muted-foreground hover:text-foreground'}`}
           >
-            <FileText className="h-4 w-4 mb-1" /> Invoice
+            <FileText className="h-3.5 w-3.5 sm:h-4 sm:w-4 mb-0.5 sm:mb-1" /> Invoice
           </button>
         </div>
 

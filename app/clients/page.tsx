@@ -180,7 +180,7 @@ export default function ClientsPage() {
       </div>
 
       {/* Clients Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-5">
         {filteredClients.map((client) => (
           <Card key={client.id} className="hover:shadow-md transition-shadow flex flex-col justify-between">
             <CardHeader className="pb-3">
@@ -279,7 +279,7 @@ export default function ClientsPage() {
 
       {/* Add Client Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="w-[95vw] sm:max-w-[500px] max-h-[90vh] overflow-y-auto p-4 sm:p-6">
           <DialogHeader>
             <DialogTitle>Add New Client Profile</DialogTitle>
             <DialogDescription>Add a new freelance client to your workspace records.</DialogDescription>

@@ -200,37 +200,37 @@ export default function InvoicesPage() {
       </div>
 
       {/* Financial Metrics */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-1.5 sm:gap-4">
         <Card className="bg-card/70">
-          <CardContent className="p-4 flex items-center justify-between">
+          <CardContent className="p-2.5 sm:p-4 flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-muted-foreground">Paid & Collected</p>
-              <h2 className="text-2xl font-bold mt-1 text-emerald-600">${totalCollected.toLocaleString()}</h2>
+              <p className="text-[10px] sm:text-xs font-medium text-muted-foreground truncate">Paid & Collected</p>
+              <h2 className="text-base sm:text-2xl font-bold mt-0.5 sm:mt-1 text-emerald-600 truncate">${totalCollected.toLocaleString()}</h2>
             </div>
-            <div className="h-10 w-10 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
-              <CheckCircle2 className="h-5 w-5" />
+            <div className="h-7 w-7 sm:h-10 sm:w-10 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0">
+              <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5" />
             </div>
           </CardContent>
         </Card>
         <Card className="bg-card/70">
-          <CardContent className="p-4 flex items-center justify-between">
+          <CardContent className="p-2.5 sm:p-4 flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-muted-foreground">Sent / Pending Remittance</p>
-              <h2 className="text-2xl font-bold mt-1 text-amber-500">${totalPending.toLocaleString()}</h2>
+              <p className="text-[10px] sm:text-xs font-medium text-muted-foreground truncate">Sent / Pending</p>
+              <h2 className="text-base sm:text-2xl font-bold mt-0.5 sm:mt-1 text-amber-500 truncate">${totalPending.toLocaleString()}</h2>
             </div>
-            <div className="h-10 w-10 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center">
-              <Clock className="h-5 w-5" />
+            <div className="h-7 w-7 sm:h-10 sm:w-10 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+              <Clock className="h-4 w-4 sm:h-5 sm:w-5" />
             </div>
           </CardContent>
         </Card>
         <Card className="bg-card/70">
-          <CardContent className="p-4 flex items-center justify-between">
+          <CardContent className="p-2.5 sm:p-4 flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-muted-foreground">Drafted Balance</p>
-              <h2 className="text-2xl font-bold mt-1 text-foreground">${totalDraft.toLocaleString()}</h2>
+              <p className="text-[10px] sm:text-xs font-medium text-muted-foreground truncate">Draft Balance</p>
+              <h2 className="text-base sm:text-2xl font-bold mt-0.5 sm:mt-1 text-foreground truncate">${totalDraft.toLocaleString()}</h2>
             </div>
-            <div className="h-10 w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-              <FileText className="h-5 w-5" />
+            <div className="h-7 w-7 sm:h-10 sm:w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+              <FileText className="h-4 w-4 sm:h-5 sm:w-5" />
             </div>
           </CardContent>
         </Card>
@@ -333,14 +333,14 @@ export default function InvoicesPage() {
 
       {/* Invoice Generator Modal */}
       <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
-        <DialogContent className="sm:max-w-[650px] max-h-[90vh] overflow-y-auto">
+        <DialogContent className="w-[95vw] sm:max-w-[650px] max-h-[90vh] overflow-y-auto p-4 sm:p-6">
           <DialogHeader>
-            <DialogTitle>Generate Freelancer Invoice</DialogTitle>
-            <DialogDescription>Add itemized billable sprint work, tax, and remit terms.</DialogDescription>
+            <DialogTitle className="text-base sm:text-lg">Generate Freelancer Invoice</DialogTitle>
+            <DialogDescription className="text-xs">Add itemized billable sprint work, tax, and remit terms.</DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleCreateInvoice} className="space-y-4 pt-2">
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
               <div>
                 <label className="text-xs font-medium text-muted-foreground">Client *</label>
                 <Select value={clientId} onValueChange={(v) => v && setClientId(v)}>
@@ -373,7 +373,7 @@ export default function InvoicesPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3">
               <div>
                 <label className="text-xs font-medium text-muted-foreground">Invoice # (Auto)</label>
                 <Input
@@ -417,8 +417,11 @@ export default function InvoicesPage() {
               </div>
 
               {items.map((item) => (
-                <div key={item.id} className="grid grid-cols-12 gap-2 items-center text-xs">
-                  <div className="col-span-6">
+                <div
+                  key={item.id}
+                  className="p-2.5 rounded-lg border bg-muted/20 space-y-2 sm:space-y-0 sm:border-0 sm:bg-transparent sm:p-0 sm:grid sm:grid-cols-12 sm:gap-2 sm:items-center text-xs"
+                >
+                  <div className="sm:col-span-6">
                     <Input
                       placeholder="Item description / deliverable"
                       value={item.description}
@@ -426,35 +429,39 @@ export default function InvoicesPage() {
                       className="h-8 text-xs"
                     />
                   </div>
-                  <div className="col-span-2">
-                    <Input
-                      type="number"
-                      placeholder="Qty/Hrs"
-                      value={item.quantity}
-                      onChange={(e) => updateItemRow(item.id, 'quantity', e.target.value)}
-                      className="h-8 text-xs"
-                    />
-                  </div>
-                  <div className="col-span-2">
-                    <Input
-                      type="number"
-                      placeholder="Rate ($)"
-                      value={item.unitPrice}
-                      onChange={(e) => updateItemRow(item.id, 'unitPrice', e.target.value)}
-                      className="h-8 text-xs"
-                    />
-                  </div>
-                  <div className="col-span-1 font-mono font-semibold text-right">
-                    ${item.amount}
-                  </div>
-                  <div className="col-span-1 text-right">
-                    <button
-                      type="button"
-                      onClick={() => removeItemRow(item.id)}
-                      className="text-muted-foreground hover:text-destructive"
-                    >
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </button>
+                  <div className="grid grid-cols-3 gap-2 items-center sm:contents">
+                    <div className="sm:col-span-2">
+                      <Input
+                        type="number"
+                        placeholder="Qty/Hrs"
+                        value={item.quantity}
+                        onChange={(e) => updateItemRow(item.id, 'quantity', e.target.value)}
+                        className="h-8 text-xs"
+                      />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <Input
+                        type="number"
+                        placeholder="Rate ($)"
+                        value={item.unitPrice}
+                        onChange={(e) => updateItemRow(item.id, 'unitPrice', e.target.value)}
+                        className="h-8 text-xs"
+                      />
+                    </div>
+                    <div className="flex items-center justify-between sm:contents">
+                      <div className="sm:col-span-1 font-mono font-semibold text-right">
+                        ${item.amount}
+                      </div>
+                      <div className="sm:col-span-1 text-right">
+                        <button
+                          type="button"
+                          onClick={() => removeItemRow(item.id)}
+                          className="text-muted-foreground hover:text-destructive p-1"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -514,7 +521,7 @@ export default function InvoicesPage() {
 
       {/* Invoice Printable Preview Modal */}
       <Dialog open={previewDialogOpen} onOpenChange={setPreviewDialogOpen}>
-        <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
+        <DialogContent className="w-[95vw] sm:max-w-[700px] max-h-[90vh] overflow-y-auto p-3 sm:p-6">
           {previewInvoice && (
             <div className="p-4 space-y-6">
               {/* Header */}

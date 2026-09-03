@@ -150,32 +150,32 @@ export default function QaIssuesPage() {
       </div>
 
       {/* KPI Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card className="p-4 flex items-center justify-between bg-card/70">
+      <div className="grid grid-cols-3 gap-1.5 sm:gap-4">
+        <Card className="p-2.5 sm:p-4 flex items-center justify-between bg-card/70">
           <div>
-            <p className="text-xs font-medium text-muted-foreground">Open Issues</p>
-            <h3 className="text-2xl font-bold mt-1 text-foreground">{openCount}</h3>
+            <p className="text-[10px] sm:text-xs font-medium text-muted-foreground truncate">Open Issues</p>
+            <h3 className="text-base sm:text-2xl font-bold mt-0.5 sm:mt-1 text-foreground truncate">{openCount}</h3>
           </div>
-          <div className="h-10 w-10 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center">
-            <AlertTriangle className="h-5 w-5" />
+          <div className="h-7 w-7 sm:h-10 sm:w-10 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+            <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5" />
           </div>
         </Card>
-        <Card className="p-4 flex items-center justify-between bg-card/70">
+        <Card className="p-2.5 sm:p-4 flex items-center justify-between bg-card/70">
           <div>
-            <p className="text-xs font-medium text-muted-foreground">Critical Severity</p>
-            <h3 className="text-2xl font-bold mt-1 text-destructive">{criticalCount}</h3>
+            <p className="text-[10px] sm:text-xs font-medium text-muted-foreground truncate">Critical</p>
+            <h3 className="text-base sm:text-2xl font-bold mt-0.5 sm:mt-1 text-destructive truncate">{criticalCount}</h3>
           </div>
-          <div className="h-10 w-10 rounded-lg bg-destructive/10 text-destructive flex items-center justify-center">
-            <ShieldAlert className="h-5 w-5" />
+          <div className="h-7 w-7 sm:h-10 sm:w-10 rounded-lg bg-destructive/10 text-destructive flex items-center justify-center shrink-0">
+            <ShieldAlert className="h-4 w-4 sm:h-5 sm:w-5" />
           </div>
         </Card>
-        <Card className="p-4 flex items-center justify-between bg-card/70">
+        <Card className="p-2.5 sm:p-4 flex items-center justify-between bg-card/70">
           <div>
-            <p className="text-xs font-medium text-muted-foreground">Resolved</p>
-            <h3 className="text-2xl font-bold mt-1 text-emerald-600">{resolvedCount}</h3>
+            <p className="text-[10px] sm:text-xs font-medium text-muted-foreground truncate">Resolved</p>
+            <h3 className="text-base sm:text-2xl font-bold mt-0.5 sm:mt-1 text-emerald-600 truncate">{resolvedCount}</h3>
           </div>
-          <div className="h-10 w-10 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
-            <CheckCircle2 className="h-5 w-5" />
+          <div className="h-7 w-7 sm:h-10 sm:w-10 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0">
+            <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5" />
           </div>
         </Card>
       </div>
@@ -269,7 +269,7 @@ export default function QaIssuesPage() {
 
       {/* Add Issue Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="sm:max-w-[480px]">
+        <DialogContent className="w-[95vw] sm:max-w-[480px] max-h-[90vh] overflow-y-auto p-4 sm:p-6">
           <DialogHeader>
             <DialogTitle>Log QA Issue or Client Feedback</DialogTitle>
             <DialogDescription>Track defects, change requests, or pre-launch checks.</DialogDescription>

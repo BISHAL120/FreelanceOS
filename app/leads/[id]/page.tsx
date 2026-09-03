@@ -218,28 +218,28 @@ export default function LeadDetailPage() {
       </div>
 
       {/* Header Profile - Simple & Clean */}
-      <div className="p-4 rounded-lg border border-border bg-card space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="p-3 sm:p-4 rounded-lg border border-border bg-card space-y-3 sm:space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3">
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-xl sm:text-2xl font-semibold tracking-tight text-foreground">
+              <h1 className="text-lg sm:text-2xl font-semibold tracking-tight text-foreground">
                 {lead.name}
               </h1>
-              <span className="font-mono text-base font-semibold text-foreground">
+              <span className="font-mono text-sm sm:text-base font-semibold text-foreground">
                 ${lead.dealValue.toLocaleString()}
               </span>
             </div>
-            <p className="text-xs text-muted-foreground mt-0.5">
+            <p className="text-[11px] sm:text-xs text-muted-foreground mt-0.5">
               {lead.company || 'Individual Prospect'} • Added {new Date(lead.createdAt).toLocaleDateString()}
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
             <Select
               value={lead.stage}
               onValueChange={(val) => val && updateLeadStage(val as LeadStage)}
             >
-              <SelectTrigger className="h-8 text-xs w-[130px]">
+              <SelectTrigger className="h-8 text-xs w-[110px] sm:w-[130px]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -255,7 +255,7 @@ export default function LeadDetailPage() {
               <Button
                 onClick={convertToClient}
                 size="sm"
-                className="h-8 text-xs"
+                className="h-8 text-xs px-2.5 sm:px-3"
               >
                 Convert to Client
               </Button>

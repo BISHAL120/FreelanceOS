@@ -73,9 +73,9 @@ export function TopNav() {
 
   return (
     <>
-      <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-background/95 px-4 backdrop-blur-sm">
-        <div className="flex items-center gap-3">
-          <SidebarTrigger className="-ml-1" />
+      <header className="sticky top-0 z-30 flex h-12 sm:h-14 items-center justify-between border-b bg-background/95 px-2 sm:px-4 backdrop-blur-sm">
+        <div className="flex items-center gap-1.5 sm:gap-3">
+          <SidebarTrigger className="-ml-1 h-8 w-8" />
           <div className="relative hidden md:flex items-center w-64">
             <Search className="absolute left-2.5 h-4 w-4 text-muted-foreground" />
             <Input
@@ -86,17 +86,17 @@ export function TopNav() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-1.5 sm:gap-2.5">
           {/* Header Live Timer Pill */}
-          <div className="flex items-center gap-2 px-3 py-1 rounded-full border bg-muted/40 text-xs font-mono">
-            <span className={`h-2 w-2 rounded-full ${isRunning ? 'bg-emerald-500 animate-pulse' : 'bg-muted-foreground/40'}`} />
+          <div className="flex items-center gap-1.5 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full border bg-muted/40 text-[11px] sm:text-xs font-mono">
+            <span className={`h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full ${isRunning ? 'bg-emerald-500 animate-pulse' : 'bg-muted-foreground/40'}`} />
             <span className="font-semibold text-foreground">{formatTimer(seconds)}</span>
             <button
               onClick={isRunning ? pauseTimer : startTimer}
-              className="p-1 rounded-full hover:bg-muted transition text-foreground"
+              className="p-0.5 sm:p-1 rounded-full hover:bg-muted transition text-foreground"
               title={isRunning ? 'Pause Timer' : 'Start Timer'}
             >
-              {isRunning ? <Pause className="h-3.5 w-3.5 text-amber-500" /> : <Play className="h-3.5 w-3.5 text-emerald-500" />}
+              {isRunning ? <Pause className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-amber-500" /> : <Play className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-emerald-500" />}
             </button>
           </div>
 
@@ -104,15 +104,15 @@ export function TopNav() {
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
-                <Button variant="outline" size="sm" className="h-8 gap-2 text-xs border-dashed px-2.5">
-                  <div className="flex items-center gap-1.5">
-                    {isAdmin && <ShieldCheck className="h-3.5 w-3.5 text-purple-600" />}
-                    {isLeadGen && <Briefcase className="h-3.5 w-3.5 text-emerald-600" />}
-                    {isDeveloper && <Code2 className="h-3.5 w-3.5 text-blue-600" />}
-                    <span className="font-medium max-w-[100px] truncate">{currentUser.name}</span>
+                <Button variant="outline" size="sm" className="h-7 sm:h-8 gap-1 sm:gap-2 text-xs border-dashed px-1.5 sm:px-2.5">
+                  <div className="flex items-center gap-1 sm:gap-1.5">
+                    {isAdmin && <ShieldCheck className="h-3.5 w-3.5 text-purple-600 shrink-0" />}
+                    {isLeadGen && <Briefcase className="h-3.5 w-3.5 text-emerald-600 shrink-0" />}
+                    {isDeveloper && <Code2 className="h-3.5 w-3.5 text-blue-600 shrink-0" />}
+                    <span className="font-medium max-w-[60px] sm:max-w-[100px] truncate">{currentUser.name.split(' ')[0]}</span>
                   </div>
-                  {getRoleBadge(currentUser.role)}
-                  <ChevronDown className="h-3 w-3 text-muted-foreground" />
+                  <span className="hidden sm:inline-flex">{getRoleBadge(currentUser.role)}</span>
+                  <ChevronDown className="h-3 w-3 text-muted-foreground hidden sm:block" />
                 </Button>
               }
             />
@@ -143,7 +143,7 @@ export function TopNav() {
                       </Avatar>
                       <div>
                         <div className="font-medium text-foreground">{u.name}</div>
-                        <div className="text-[10px] text-muted-foreground">{u.title || u.email}</div>
+                        <div className="text-[10px] text-muted-foreground">{u.title || u.role}</div>
                       </div>
                     </div>
                     {getRoleBadge(u.role)}
@@ -157,9 +157,9 @@ export function TopNav() {
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
-                <Button size="sm" className="h-8 gap-1 text-xs">
+                <Button size="sm" className="h-7 sm:h-8 px-2 sm:px-3 gap-1 text-xs">
                   <Plus className="h-3.5 w-3.5" />
-                  <span>New</span>
+                  <span className="hidden sm:inline">New</span>
                 </Button>
               }
             />
@@ -194,12 +194,12 @@ export function TopNav() {
           <Button
             variant="ghost"
             size="icon"
-            className="h-8 w-8 text-muted-foreground hover:text-foreground"
+            className="h-7 w-7 sm:h-8 sm:w-8 text-muted-foreground hover:text-foreground"
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             title="Toggle theme"
           >
-            <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            <Sun className="h-3.5 w-3.5 sm:h-4 sm:w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <Moon className="absolute h-3.5 w-3.5 sm:h-4 sm:w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
             <span className="sr-only">Toggle theme</span>
           </Button>
         </div>

@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import { TopNav } from "@/components/top-nav"
+import { MobileBottomNav } from "@/components/mobile-bottom-nav"
 import { AuthProvider } from "@/components/auth-context"
 import { TimerProvider } from "@/components/timer-context"
 import { cn } from "@/lib/utils"
@@ -56,9 +57,10 @@ export default function RootLayout({
                   <AppSidebar />
                   <div className="flex flex-col flex-1 min-w-0">
                     <TopNav />
-                    <main className="flex-1 p-4 md:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+                    <main className="flex-1 px-2.5 py-3 sm:px-4 sm:py-5 md:px-6 lg:px-8 max-w-7xl w-full mx-auto pb-20 md:pb-8">
                       {children}
                     </main>
+                    <MobileBottomNav />
                   </div>
                 </SidebarProvider>
               </TooltipProvider>

@@ -142,53 +142,53 @@ export default function TimeTrackerPage() {
 
       {/* Main Stopwatch Widget Card */}
       <Card className="border-primary/20 bg-gradient-to-br from-card via-card to-primary/5 shadow-md">
-        <CardContent className="p-6 md:p-8">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+        <CardContent className="p-4 sm:p-6 md:p-8">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 sm:gap-6">
             {/* Big Stopwatch Display */}
-            <div className="flex flex-col items-start">
+            <div className="flex flex-col items-start w-full lg:w-auto">
               <div className="flex items-center gap-2 mb-1">
                 <span className={`h-2.5 w-2.5 rounded-full ${isRunning ? 'bg-emerald-500 animate-ping' : 'bg-muted-foreground/50'}`} />
                 <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   {isRunning ? 'Timer Active' : 'Timer Ready'}
                 </span>
               </div>
-              <div className="font-mono text-5xl md:text-6xl font-bold tracking-tight text-foreground">
+              <div className="font-mono text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground">
                 {formatLargeTimer(seconds)}
               </div>
-              <div className="flex items-center gap-2 mt-4">
+              <div className="flex items-center gap-1.5 sm:gap-2 mt-3 sm:mt-4 flex-wrap w-full">
                 <Button
-                  size="lg"
+                  size="default"
                   onClick={isRunning ? pauseTimer : startTimer}
-                  className={`gap-2 h-11 px-6 font-semibold shadow-sm ${isRunning ? 'bg-amber-500 hover:bg-amber-600 text-white' : ''}`}
+                  className={`gap-1.5 sm:gap-2 h-9 sm:h-11 px-3 sm:px-6 font-semibold shadow-sm flex-1 sm:flex-initial text-xs sm:text-sm ${isRunning ? 'bg-amber-500 hover:bg-amber-600 text-white' : ''}`}
                 >
                   {isRunning ? (
                     <>
-                      <Pause className="h-5 w-5" /> Pause Timer
+                      <Pause className="h-4 w-4 sm:h-5 sm:w-5" /> Pause
                     </>
                   ) : (
                     <>
-                      <Play className="h-5 w-5" /> Start Timer
+                      <Play className="h-4 w-4 sm:h-5 sm:w-5" /> Start
                     </>
                   )}
                 </Button>
-                <Button variant="outline" size="lg" onClick={resetTimer} className="h-11 px-4 text-xs">
-                  <RotateCcw className="h-4 w-4 mr-1.5" /> Reset
+                <Button variant="outline" size="default" onClick={resetTimer} className="h-9 sm:h-11 px-3 sm:px-4 text-xs">
+                  <RotateCcw className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 sm:mr-1.5" /> Reset
                 </Button>
                 <Button
                   variant="secondary"
-                  size="lg"
+                  size="default"
                   onClick={handleSaveActiveTimer}
                   disabled={seconds < 10 || saving}
-                  className="h-11 px-5 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white"
+                  className="h-9 sm:h-11 px-3 sm:px-5 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white flex-1 sm:flex-initial"
                 >
-                  <CheckCircle2 className="h-4 w-4 mr-1.5" />
+                  <CheckCircle2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 sm:mr-1.5" />
                   {saving ? 'Logging...' : 'Log Session'}
                 </Button>
               </div>
             </div>
 
             {/* Session Metadata Controls */}
-            <div className="space-y-3 w-full lg:max-w-md bg-muted/40 p-4 rounded-xl border">
+            <div className="space-y-3 w-full lg:max-w-md bg-muted/40 p-3.5 sm:p-4 rounded-xl border">
               <div>
                 <label className="text-xs font-medium text-muted-foreground">What are you working on?</label>
                 <Input
@@ -198,7 +198,7 @@ export default function TimeTrackerPage() {
                   className="mt-1 text-xs"
                 />
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
                 <div>
                   <label className="text-xs font-medium text-muted-foreground">Client</label>
                   <Select value={selectedClientId} onValueChange={(v) => v && setSelectedClientId(v)}>
@@ -235,38 +235,38 @@ export default function TimeTrackerPage() {
         </CardContent>
       </Card>
 
-      {/* Stats Summary */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      {/* Financial Metrics Summary */}
+      <div className="grid grid-cols-3 gap-1.5 sm:gap-4">
         <Card className="bg-card/70">
-          <CardContent className="p-4 flex items-center justify-between">
+          <CardContent className="p-2.5 sm:p-4 flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-muted-foreground">Total Hours Tracked</p>
-              <h3 className="text-2xl font-bold mt-1 text-foreground">{totalHours} hrs</h3>
+              <p className="text-[10px] sm:text-xs font-medium text-muted-foreground truncate">Total Hours</p>
+              <h3 className="text-base sm:text-2xl font-bold mt-0.5 sm:mt-1 text-foreground truncate">{totalHours.toFixed(1)}h</h3>
             </div>
-            <div className="h-10 w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-              <Clock className="h-5 w-5" />
+            <div className="h-7 w-7 sm:h-10 sm:w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+              <Clock className="h-4 w-4 sm:h-5 sm:w-5" />
             </div>
           </CardContent>
         </Card>
         <Card className="bg-card/70">
-          <CardContent className="p-4 flex items-center justify-between">
+          <CardContent className="p-2.5 sm:p-4 flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-muted-foreground">Billable Earnings</p>
-              <h3 className="text-2xl font-bold mt-1 text-emerald-600">${Math.round(totalEarned).toLocaleString()}</h3>
+              <p className="text-[10px] sm:text-xs font-medium text-muted-foreground truncate">Billable Earnings</p>
+              <h3 className="text-base sm:text-2xl font-bold mt-0.5 sm:mt-1 text-emerald-600 truncate">${Math.round(totalEarned).toLocaleString()}</h3>
             </div>
-            <div className="h-10 w-10 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
-              <DollarSign className="h-5 w-5" />
+            <div className="h-7 w-7 sm:h-10 sm:w-10 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0">
+              <DollarSign className="h-4 w-4 sm:h-5 sm:w-5" />
             </div>
           </CardContent>
         </Card>
         <Card className="bg-card/70">
-          <CardContent className="p-4 flex items-center justify-between">
+          <CardContent className="p-2.5 sm:p-4 flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-muted-foreground">Logged Sessions</p>
-              <h3 className="text-2xl font-bold mt-1 text-foreground">{entries.length} Sessions</h3>
+              <p className="text-[10px] sm:text-xs font-medium text-muted-foreground truncate">Sessions</p>
+              <h3 className="text-base sm:text-2xl font-bold mt-0.5 sm:mt-1 text-foreground truncate">{entries.length}</h3>
             </div>
-            <div className="h-10 w-10 rounded-lg bg-blue-500/10 text-blue-500 flex items-center justify-center">
-              <Calendar className="h-5 w-5" />
+            <div className="h-7 w-7 sm:h-10 sm:w-10 rounded-lg bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0">
+              <Calendar className="h-4 w-4 sm:h-5 sm:w-5" />
             </div>
           </CardContent>
         </Card>

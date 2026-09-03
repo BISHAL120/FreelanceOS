@@ -118,7 +118,7 @@ Deliverables include architectural setup, iterative weekly milestone demos, resp
         <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
           <Layers className="h-4 w-4 text-primary" /> Standard Client Packages
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
           {PACKAGES.map((pkg) => (
             <Card key={pkg.id} className="flex flex-col justify-between hover:shadow-md transition">
               <CardHeader className="pb-3">
@@ -162,7 +162,7 @@ Deliverables include architectural setup, iterative weekly milestone demos, resp
             Calculate custom project rates and generate ready-to-send pitch proposal copy.
           </CardDescription>
         </CardHeader>
-        <CardContent className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <CardContent className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-8 p-4 sm:p-6">
           {/* Controls */}
           <div className="space-y-5">
             <div>
