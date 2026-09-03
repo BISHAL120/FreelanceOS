@@ -730,20 +730,37 @@ let memoryActivities: ActivityLog[] = [
 
 // Database check helper
 let isDbAvailable: boolean | null = null
-let hasCheckedDb = false
 
 async function checkDb(): Promise<boolean> {
   if (isDbAvailable !== null) return isDbAvailable
-  if (hasCheckedDb) return false
-  hasCheckedDb = true
+
+  const dbUrl = process.env.DATABASE_URL
+
+  // 1. If no DATABASE_URL is set, or if explicitly configured to use mock data, or empty string
+  if (!dbUrl || dbUrl.trim() === '' || process.env.USE_MOCK_DATA === 'true') {
+    isDbAvailable = false
+    return false
+  }
+
+  // 2. If running in production (e.g. Vercel) and DATABASE_URL points to localhost/dummy, do not connect
+  if (
+    process.env.NODE_ENV === 'production' &&
+    (dbUrl.includes('localhost') ||
+      dbUrl.includes('127.0.0.1') ||
+      dbUrl.includes('crm_dummy') ||
+      dbUrl.includes('freelancer_crm?schema=public'))
+  ) {
+    isDbAvailable = false
+    return false
+  }
+
+  // 3. Must be a real remote postgres URL
+  if (!dbUrl.startsWith('postgresql://') && !dbUrl.startsWith('postgres://')) {
+    isDbAvailable = false
+    return false
+  }
 
   try {
-    const dbUrl = process.env.DATABASE_URL
-    if (!dbUrl) {
-      isDbAvailable = false
-      return false
-    }
-
     const net = await import('net')
     const parsed = new URL(dbUrl.replace(/^postgresql:\/\//, 'http://'))
     const host = parsed.hostname || 'localhost'
