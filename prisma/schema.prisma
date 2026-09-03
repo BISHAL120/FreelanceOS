@@ -1,0 +1,370 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum UserRole {
+  ADMIN
+  LEAD_GEN
+  DEVELOPER
+}
+
+enum ClientStatus {
+  LEAD
+  ACTIVE
+  PAUSED
+  COMPLETED
+  ARCHIVED
+}
+
+enum LeadStage {
+  NEW
+  CONTACTED
+  QUALIFIED
+  PROPOSAL_SENT
+  NEGOTIATING
+  WON
+  LOST
+}
+
+enum LeadActivityType {
+  NOTE
+  MESSAGE_SENT
+  REPLY_RECEIVED
+  FOLLOW_UP
+  CALL
+}
+
+enum ProjectStatus {
+  PLANNING
+  ACTIVE
+  REVIEW
+  COMPLETED
+  PAUSED
+}
+
+enum ProjectBillingType {
+  FIXED
+  HOURLY
+}
+
+enum MilestoneStatus {
+  UPCOMING
+  IN_PROGRESS
+  COMPLETED
+  APPROVED
+}
+
+enum MilestonePaymentStatus {
+  UNPAID
+  INVOICED
+  PAID
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  REVIEW
+  DONE
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum IssueType {
+  BUG
+  FEATURE_REQUEST
+  FEEDBACK
+  QUESTION
+}
+
+enum IssueSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum IssueStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+}
+
+model User {
+  id              String         @id @default(uuid())
+  name            String
+  email           String         @unique
+  role            UserRole       @default(DEVELOPER)
+  avatar          String?
+  title           String?
+  hourlyRate      Float          @default(0.0)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  assignedTasks   Task[]
+  assignedProjects ProjectAssignment[]
+  leadActivities  LeadActivity[]
+  assignedLeads   Lead[]
+
+  @@map("users")
+}
+
+model Client {
+  id              String        @id @default(uuid())
+  name            String
+  companyName     String?
+  email           String
+  phone           String?
+  website         String?
+  status          ClientStatus  @default(ACTIVE)
+  defaultRate     Float         @default(100.0)
+  budget          Float         @default(0.0)
+  industry        String?
+  address         String?
+  notes           String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  leads           Lead[]
+  projects        Project[]
+  tasks           Task[]
+  timeEntries     TimeEntry[]
+  invoices        Invoice[]
+  issues          Issue[]
+
+  @@map("clients")
+}
+
+model Lead {
+  id              String         @id @default(uuid())
+  name            String
+  company         String?
+  email           String
+  phone           String?
+  dealValue       Float          @default(0.0)
+  stage           LeadStage      @default(NEW)
+  source          String?
+  notes           String?
+  nextFollowUp    DateTime?
+  convertedClient Client?        @relation(fields: [convertedClientId], references: [id], onDelete: SetNull)
+  convertedClientId String?
+  assignedTo      User?          @relation(fields: [assignedToId], references: [id], onDelete: SetNull)
+  assignedToId    String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  activities      LeadActivity[]
+
+  @@map("leads")
+}
+
+model LeadActivity {
+  id              String           @id @default(uuid())
+  lead            Lead             @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  leadId          String
+  type            LeadActivityType @default(NOTE)
+  title           String
+  content         String
+  imageUrl        String?
+  authorName      String
+  author          User?            @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  authorId        String?
+  createdAt       DateTime         @default(now())
+
+  @@map("lead_activities")
+}
+
+model Project {
+  id                  String              @id @default(uuid())
+  title               String
+  description         String?
+  status              ProjectStatus       @default(ACTIVE)
+  billingType         ProjectBillingType  @default(FIXED)
+  hourlyRate          Float?
+  budget              Float               @default(0.0)
+  spent               Float               @default(0.0)
+  progress            Int                 @default(0)
+  downpaymentPercent  Float?              // e.g. 10.0 for 10%
+  downpaymentAmount   Float?              // e.g. $1,500
+  downpaymentPaid     Boolean             @default(false)
+  downpaymentPaidAt   DateTime?
+  downpaymentMethod   String?             // e.g. "Stripe", "Bank Wire"
+  downpaymentNote     String?
+  startDate           DateTime?
+  endDate             DateTime?
+  client              Client              @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  clientId            String
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  tasks               Task[]
+  timeEntries         TimeEntry[]
+  invoices            Invoice[]
+  issues              Issue[]
+  assignments         ProjectAssignment[]
+  milestones          ProjectMilestone[]
+
+  @@map("projects")
+}
+
+model ProjectAssignment {
+  id              String         @id @default(uuid())
+  project         Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId       String
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String
+  role            String?        // e.g. "Lead Architect", "Frontend Engineer", "UI Designer", "QA"
+  assignedAt      DateTime       @default(now())
+
+  @@unique([projectId, userId])
+  @@map("project_assignments")
+}
+
+model ProjectMilestone {
+  id              String                  @id @default(uuid())
+  project         Project                 @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId       String
+  title           String
+  description     String?
+  amount          Float                   @default(0.0)
+  percentage      Float?                  // e.g. 25 for 25%
+  dueDate         DateTime?
+  status          MilestoneStatus         @default(UPCOMING)
+  paymentStatus   MilestonePaymentStatus  @default(UNPAID)
+  paidAt          DateTime?
+  paidAmount      Float                   @default(0.0)
+  paymentMethod   String?                 // e.g. "Stripe", "Bank Wire", "Wise", "Crypto"
+  paymentNote     String?
+  order           Int                     @default(0)
+  tasks           Task[]
+  createdAt       DateTime                @default(now())
+  updatedAt       DateTime                @updatedAt
+
+  @@map("project_milestones")
+}
+
+model Task {
+  id              String             @id @default(uuid())
+  title           String
+  description     String?
+  status          TaskStatus         @default(TODO)
+  priority        TaskPriority       @default(MEDIUM)
+  dueDate         DateTime?
+  startedAt       DateTime?
+  completedAt     DateTime?
+  estimatedHours  Float              @default(0.0)
+  actualHours     Float              @default(0.0)
+  project         Project?           @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  projectId       String?
+  milestone       ProjectMilestone?  @relation(fields: [milestoneId], references: [id], onDelete: SetNull)
+  milestoneId     String?
+  client          Client?            @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  clientId        String?
+  assignedTo      User?              @relation(fields: [assignedToId], references: [id], onDelete: SetNull)
+  assignedToId    String?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  @@map("tasks")
+}
+
+model TimeEntry {
+  id              String        @id @default(uuid())
+  description     String
+  durationMinutes Int           @default(0)
+  hourlyRate      Float         @default(100.0)
+  billable        Boolean       @default(true)
+  date            DateTime      @default(now())
+  project         Project?      @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  projectId       String?
+  client          Client?       @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  clientId        String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@map("time_entries")
+}
+
+model Invoice {
+  id              String        @id @default(uuid())
+  invoiceNumber   String        @unique
+  issueDate       DateTime      @default(now())
+  dueDate         DateTime
+  status          InvoiceStatus @default(DRAFT)
+  notes           String?
+  subtotal        Float         @default(0.0)
+  taxRate         Float         @default(0.0)
+  taxAmount       Float         @default(0.0)
+  discount        Float         @default(0.0)
+  total           Float         @default(0.0)
+  paidAt          DateTime?
+  client          Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  clientId        String
+  project         Project?      @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  projectId       String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  items           InvoiceItem[]
+
+  @@map("invoices")
+}
+
+model InvoiceItem {
+  id              String        @id @default(uuid())
+  description     String
+  quantity        Float         @default(1.0)
+  unitPrice       Float         @default(0.0)
+  amount          Float         @default(0.0)
+  invoice         Invoice       @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  invoiceId       String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@map("invoice_items")
+}
+
+model Issue {
+  id              String        @id @default(uuid())
+  title           String
+  description     String
+  type            IssueType     @default(BUG)
+  severity        IssueSeverity @default(MEDIUM)
+  status          IssueStatus   @default(OPEN)
+  client          Client?       @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  clientId        String?
+  project         Project?      @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  projectId       String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@map("issues")
+}
+
+model ActivityLog {
+  id              String        @id @default(uuid())
+  action          String
+  entityType      String
+  entityId        String?
+  details         String?
+  createdAt       DateTime      @default(now())
+
+  @@map("activity_logs")
+}
