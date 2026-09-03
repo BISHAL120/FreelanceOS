@@ -818,12 +818,12 @@ export async function getClients(): Promise<Client[]> {
         orderBy: { createdAt: 'desc' },
         include: { projects: true, invoices: true, tasks: true },
       })
-      return dbClients.map((c) => ({
+      return (dbClients as any[]).map((c: any) => ({
         ...c,
         status: c.status as Client['status'],
         createdAt: c.createdAt.toISOString(),
         updatedAt: c.updatedAt.toISOString(),
-        projects: c.projects.map((p) => ({
+        projects: (c.projects || []).map((p: any) => ({
           ...p,
           status: p.status as Project['status'],
           startDate: p.startDate?.toISOString() || null,
@@ -832,7 +832,7 @@ export async function getClients(): Promise<Client[]> {
           createdAt: p.createdAt.toISOString(),
           updatedAt: p.updatedAt.toISOString(),
         })),
-        invoices: c.invoices.map((inv) => ({
+        invoices: (c.invoices || []).map((inv: any) => ({
           ...inv,
           status: inv.status as Invoice['status'],
           issueDate: inv.issueDate.toISOString(),
@@ -842,7 +842,7 @@ export async function getClients(): Promise<Client[]> {
           updatedAt: inv.updatedAt.toISOString(),
           items: [],
         })),
-        tasks: c.tasks.map((t) => ({
+        tasks: (c.tasks || []).map((t: any) => ({
           ...t,
           status: t.status as Task['status'],
           priority: t.priority as Task['priority'],
@@ -863,17 +863,17 @@ export async function getClients(): Promise<Client[]> {
 export async function getClient(id: string): Promise<Client | null> {
   if (await checkDb()) {
     try {
-      const c = await prisma.client.findUnique({
+      const c = (await prisma.client.findUnique({
         where: { id },
         include: { projects: true, invoices: true, tasks: true, timeEntries: true },
-      })
+      })) as any
       if (!c) return null
       return {
         ...c,
         status: c.status as Client['status'],
         createdAt: c.createdAt.toISOString(),
         updatedAt: c.updatedAt.toISOString(),
-        projects: c.projects.map((p) => ({
+        projects: (c.projects || []).map((p: any) => ({
           ...p,
           status: p.status as Project['status'],
           startDate: p.startDate?.toISOString() || null,
@@ -882,7 +882,7 @@ export async function getClient(id: string): Promise<Client | null> {
           createdAt: p.createdAt.toISOString(),
           updatedAt: p.updatedAt.toISOString(),
         })),
-        invoices: c.invoices.map((inv) => ({
+        invoices: (c.invoices || []).map((inv: any) => ({
           ...inv,
           status: inv.status as Invoice['status'],
           issueDate: inv.issueDate.toISOString(),
@@ -892,7 +892,7 @@ export async function getClient(id: string): Promise<Client | null> {
           updatedAt: inv.updatedAt.toISOString(),
           items: [],
         })),
-        tasks: c.tasks.map((t) => ({
+        tasks: (c.tasks || []).map((t: any) => ({
           ...t,
           status: t.status as Task['status'],
           priority: t.priority as Task['priority'],
@@ -902,7 +902,7 @@ export async function getClient(id: string): Promise<Client | null> {
           createdAt: t.createdAt.toISOString(),
           updatedAt: t.updatedAt.toISOString(),
         })),
-        timeEntries: c.timeEntries.map((te) => ({
+        timeEntries: (c.timeEntries || []).map((te: any) => ({
           ...te,
           date: te.date.toISOString(),
           createdAt: te.createdAt.toISOString(),
@@ -1031,7 +1031,7 @@ export async function getLeads(): Promise<Lead[]> {
   if (await checkDb()) {
     try {
       const dbLeads = await prisma.lead.findMany({ orderBy: { createdAt: 'desc' } })
-      return dbLeads.map((l) => ({
+      return (dbLeads as any[]).map((l: any) => ({
         ...l,
         stage: l.stage as Lead['stage'],
         nextFollowUp: l.nextFollowUp?.toISOString() || null,
@@ -1176,7 +1176,7 @@ export async function getProjects(userId?: string, role?: string): Promise<Proje
         orderBy: { createdAt: 'desc' },
         include: { client: true, tasks: true, timeEntries: true },
       })
-      const mapped = dbProjects.map((p) => ({
+      const mapped = (dbProjects as any[]).map((p: any) => ({
         ...p,
         status: p.status as Project['status'],
         clientName: p.client?.name || 'Client',
@@ -1185,7 +1185,7 @@ export async function getProjects(userId?: string, role?: string): Promise<Proje
         downpaymentPaidAt: p.downpaymentPaidAt?.toISOString() || null,
         createdAt: p.createdAt.toISOString(),
         updatedAt: p.updatedAt.toISOString(),
-        tasks: p.tasks.map((t) => ({
+        tasks: (p.tasks || []).map((t: any) => ({
           ...t,
           status: t.status as Task['status'],
           priority: t.priority as Task['priority'],
@@ -1195,7 +1195,7 @@ export async function getProjects(userId?: string, role?: string): Promise<Proje
           createdAt: t.createdAt.toISOString(),
           updatedAt: t.updatedAt.toISOString(),
         })),
-        timeEntries: p.timeEntries.map((te) => ({
+        timeEntries: (p.timeEntries || []).map((te: any) => ({
           ...te,
           date: te.date.toISOString(),
           createdAt: te.createdAt.toISOString(),
@@ -1841,7 +1841,7 @@ export async function getUsers(): Promise<User[]> {
   if (await checkDb()) {
     try {
       const dbUsers = await prisma.user.findMany({ orderBy: { createdAt: 'asc' } })
-      return dbUsers.map((u) => ({
+      return (dbUsers as any[]).map((u: any) => ({
         ...u,
         role: u.role as UserRole,
         createdAt: u.createdAt.toISOString(),
@@ -1948,7 +1948,7 @@ export async function getLeadActivities(leadId: string): Promise<LeadActivity[]>
         where: { leadId },
         orderBy: { createdAt: 'desc' },
       })
-      return dbActs.map((a) => ({
+      return (dbActs as any[]).map((a: any) => ({
         ...a,
         type: a.type as LeadActivity['type'],
         createdAt: a.createdAt.toISOString(),
