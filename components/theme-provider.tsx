@@ -7,11 +7,21 @@ function ThemeProvider({
   children,
   ...props
 }: React.ComponentProps<typeof NextThemesProvider>) {
+  React.useEffect(() => {
+    try {
+      if (localStorage.getItem("theme") === "system") {
+        localStorage.setItem("theme", "dark")
+      }
+    } catch {
+      // ignore
+    }
+  }, [])
+
   return (
     <NextThemesProvider
       attribute="class"
-      defaultTheme="system"
-      enableSystem
+      defaultTheme="dark"
+      enableSystem={false}
       disableTransitionOnChange
       {...props}
     >
