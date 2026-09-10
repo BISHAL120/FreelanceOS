@@ -18,6 +18,7 @@ import {
   UserCheck,
   Play,
   Pause,
+  Lightbulb,
 } from 'lucide-react'
 import {
   Sidebar,
@@ -65,6 +66,11 @@ export function AppSidebar() {
     { title: 'Rate Card & Services', href: '/services', icon: Sparkles },
   ]
 
+  // Admin-only strategy tools
+  let strategyNav = [
+    { title: 'Idea Vault', href: '/ideas', icon: Lightbulb },
+  ]
+
   if (isLeadGen) {
     coreNav = [
       { title: 'Leads Dashboard', href: '/', icon: LayoutDashboard },
@@ -73,6 +79,7 @@ export function AppSidebar() {
       { title: 'Rate Card & Packages', href: '/services', icon: Sparkles },
     ]
     secondaryNav = []
+    strategyNav = []
   } else if (isDeveloper) {
     coreNav = [
       { title: 'Dev Dashboard', href: '/', icon: LayoutDashboard },
@@ -82,6 +89,7 @@ export function AppSidebar() {
       { title: 'Time Tracker', href: '/time-tracker', icon: Clock },
     ]
     secondaryNav = []
+    strategyNav = []
   }
 
   const getRoleLabel = (role: string) => {
@@ -211,6 +219,37 @@ export function AppSidebar() {
                                 {item.badge}
                               </Badge>
                             )}
+                          </Link>
+                        }
+                      />
+                    </SidebarMenuItem>
+                  )
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
+
+        {/* STRATEGY & PLANNING (Admin only) */}
+        {strategyNav.length > 0 && (
+          <SidebarGroup className="mt-1">
+            <SidebarGroupLabel className="text-[11px] font-medium tracking-wider uppercase text-muted-foreground">
+              Strategy & Planning
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {strategyNav.map((item) => {
+                  const isActive = pathname === item.href || pathname.startsWith(item.href)
+                  const Icon = item.icon
+                  return (
+                    <SidebarMenuItem key={item.href}>
+                      <SidebarMenuButton
+                        isActive={isActive}
+                        tooltip={item.title}
+                        render={
+                          <Link href={item.href} className="flex items-center gap-2.5 w-full">
+                            <Icon className="h-4 w-4 shrink-0" />
+                            <span className="text-sm font-medium">{item.title}</span>
                           </Link>
                         }
                       />

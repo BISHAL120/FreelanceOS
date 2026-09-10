@@ -107,6 +107,25 @@ enum IssueStatus {
   RESOLVED
 }
 
+enum IdeaCategory {
+  SOFTWARE
+  SERVICE
+}
+
+enum IdeaStatus {
+  BACKLOG
+  RESEARCHING
+  PLANNED
+  BUILDING
+  LAUNCHED
+}
+
+enum IdeaEffort {
+  LOW
+  MEDIUM
+  HIGH
+}
+
 model User {
   id              String         @id @default(uuid())
   name            String
@@ -357,6 +376,40 @@ model Issue {
   updatedAt       DateTime      @updatedAt
 
   @@map("issues")
+}
+
+model Industry {
+  id              String          @id @default(uuid())
+  name            String
+  emoji           String          @default("💡")
+  tagline         String
+  painPoints      String[]
+  opportunities   String[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  ideas           IndustryIdea[]
+
+  @@map("industries")
+}
+
+model IndustryIdea {
+  id              String        @id @default(uuid())
+  industry        Industry      @relation(fields: [industryId], references: [id], onDelete: Cascade)
+  industryId      String
+  title           String
+  category        IdeaCategory  @default(SOFTWARE)
+  status          IdeaStatus    @default(BACKLOG)
+  summary         String
+  features        String[]
+  techStack       String[]
+  priceRange      String
+  effort          IdeaEffort    @default(MEDIUM)
+  notes           String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@map("industry_ideas")
 }
 
 model ActivityLog {

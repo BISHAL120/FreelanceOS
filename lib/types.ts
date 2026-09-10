@@ -12,6 +12,10 @@ export type IssueType = 'BUG' | 'FEATURE_REQUEST' | 'FEEDBACK' | 'QUESTION'
 export type IssueSeverity = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
 export type IssueStatus = 'OPEN' | 'IN_PROGRESS' | 'RESOLVED'
 
+export type IdeaCategory = 'SOFTWARE' | 'SERVICE'
+export type IdeaStatus = 'BACKLOG' | 'RESEARCHING' | 'PLANNED' | 'BUILDING' | 'LAUNCHED'
+export type IdeaEffort = 'LOW' | 'MEDIUM' | 'HIGH'
+
 export interface User {
   id: string
   name: string
@@ -235,6 +239,35 @@ export interface ActivityLog {
   entityId?: string | null
   details?: string | null
   createdAt: string
+}
+
+export interface IndustryIdea {
+  id: string
+  industryId: string
+  title: string
+  category: IdeaCategory
+  status: IdeaStatus
+  summary: string
+  features: string[]
+  techStack: string[]
+  priceRange: string
+  effort: IdeaEffort
+  notes?: string | null
+  createdAt: string
+  updatedAt: string
+}
+
+export interface Industry {
+  id: string
+  name: string
+  emoji: string
+  tagline: string
+  painPoints: string[]
+  opportunities: string[]
+  ideas?: IndustryIdea[]
+  ideaCount?: number
+  createdAt: string
+  updatedAt: string
 }
 
 export interface DashboardMetrics {

@@ -18,6 +18,8 @@ import type {
   Issue,
   ActivityLog,
   DashboardMetrics,
+  Industry,
+  IndustryIdea,
 } from './types'
 
 // Initial team members (RBAC)
@@ -725,6 +727,580 @@ let memoryActivities: ActivityLog[] = [
     entityId: 'lead-2',
     details: 'Kora Logistics moved to NEGOTIATING stage ($12,000.00)',
     createdAt: new Date(Date.now() - 24 * 3600000).toISOString(),
+  },
+]
+
+// Industry Idea Vault (brainstorming & future product plans)
+let memoryIndustries: Industry[] = [
+  {
+    id: 'ind-1',
+    name: 'Gym & Fitness Studios',
+    emoji: '🏋️',
+    tagline: 'Independent gyms, CrossFit boxes, and personal trainers drowning in manual admin.',
+    painPoints: [
+      'Class bookings handled over WhatsApp and DMs',
+      'No-shows with no automated reminders',
+      'Membership renewals tracked in spreadsheets',
+      'Trainers cannot see client progress history',
+    ],
+    opportunities: [
+      'Recurring monthly memberships = predictable SaaS revenue',
+      'Owner-operators buy tools that save front-desk hours',
+      'High churn makes retention automation a clear ROI pitch',
+    ],
+    createdAt: new Date(Date.now() - 40 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'ind-2',
+    name: 'Auto Service & Detailing',
+    emoji: '🚗',
+    tagline: 'Garages, mobile mechanics, and detailing shops with zero digital service history.',
+    painPoints: [
+      'Job cards and vehicle history kept on paper',
+      'Customers constantly call for status updates',
+      'Quotes built by hand for every job',
+      'No reminder system for scheduled maintenance',
+    ],
+    opportunities: [
+      'Vehicle service history creates stickiness and lock-in',
+      'Quote-to-invoice flow is a repeatable template',
+      'Mobile detailers need lightweight booking on the go',
+    ],
+    createdAt: new Date(Date.now() - 38 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'ind-3',
+    name: 'Barbershops & Salons',
+    emoji: '💈',
+    tagline: 'Chair-renting stylists and shops losing revenue to no-shows and phone-tag booking.',
+    painPoints: [
+      'Walk-ins and phone bookings collide, causing double-booking',
+      'No-shows with no deposit protection',
+      'Stylists keep their own client notes, lost when they leave',
+      'Loyalty is tracked mentally, not measured',
+    ],
+    opportunities: [
+      'Deposit-backed booking directly recovers lost revenue',
+      'Stylist-level scheduling matches how shops actually work',
+      'Simple enough to sell without a demo call',
+    ],
+    createdAt: new Date(Date.now() - 30 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'ind-4',
+    name: 'Restaurants & Cafés',
+    emoji: '🍽️',
+    tagline: 'Small food businesses juggling delivery apps, reservations, and stock by hand.',
+    painPoints: [
+      'Orders scattered across delivery platforms with no unified view',
+      'Menu prices updated in five places manually',
+      'Food waste from guessing prep quantities',
+      'No visibility into repeat vs one-time customers',
+    ],
+    opportunities: [
+      'Direct-ordering site cuts third-party commission fees',
+      'Menu sync is an obvious time-saver to demonstrate',
+      'Local SEO plus booking is a combined offering',
+    ],
+    createdAt: new Date(Date.now() - 26 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'ind-5',
+    name: 'Dental & Medical Clinics',
+    emoji: '🦷',
+    tagline: 'Private clinics with manual appointment books and heavy no-show losses.',
+    painPoints: [
+      'Appointment book is a physical diary',
+      'No-show rate quietly eats a full day of revenue weekly',
+      'Patient records are paper folders',
+      'Follow-up recalls are inconsistent',
+    ],
+    opportunities: [
+      'No-show reduction has a hard dollar value to anchor pricing',
+      'Recall automation drives repeat visits without new patients',
+      'Compliance-aware records justify a premium tier',
+    ],
+    createdAt: new Date(Date.now() - 20 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'ind-6',
+    name: 'Real Estate Agencies',
+    emoji: '🏠',
+    tagline: 'Small agencies with leads leaking between agents and spreadsheets.',
+    painPoints: [
+      'Buyer leads sit unassigned for days',
+      'Property viewings booked by text message',
+      'Listing details duplicated across portals',
+      'No follow-up cadence after viewings',
+    ],
+    opportunities: [
+      'Lead routing directly increases closed deals',
+      'Portal listing sync is a strong differentiator',
+      'Per-agent seats scale pricing with agency size',
+    ],
+    createdAt: new Date(Date.now() - 14 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'ind-7',
+    name: 'Logistics & Local Delivery',
+    emoji: '🚚',
+    tagline: 'Courier and last-mile operators with no live tracking for their own customers.',
+    painPoints: [
+      'Dispatchers coordinate drivers over phone calls',
+      'Customers call constantly asking where the parcel is',
+      'Proof of delivery collected as photo messages',
+      'Route planning done from memory',
+    ],
+    opportunities: [
+      'Live tracking page removes the biggest support burden',
+      'Proof-of-delivery capture is a concrete daily-use feature',
+      'Route optimisation offers measurable fuel savings',
+    ],
+    createdAt: new Date(Date.now() - 9 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'ind-8',
+    name: 'Home Services & Trades',
+    emoji: '🔧',
+    tagline: 'Plumbers, electricians, and cleaners quoting jobs from a van with no CRM.',
+    painPoints: [
+      'Quotes lost in text threads',
+      'Job scheduling double-booked across crews',
+      'Invoices sent late, so payment is late',
+      'No record of which jobs were profitable',
+    ],
+    opportunities: [
+      'Quote-to-invoice-to-payment flow is a complete sellable story',
+      'Per-crew scheduling maps to how trades actually operate',
+      'Late-payment reminders recover cash flow fast',
+    ],
+    createdAt: new Date(Date.now() - 5 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+]
+
+let memoryIndustryIdeas: IndustryIdea[] = [
+  // Gym & Fitness
+  {
+    id: 'idv-1',
+    industryId: 'ind-1',
+    title: 'GymClass Booking & Membership OS',
+    category: 'SOFTWARE',
+    status: 'PLANNED',
+    summary: 'Booking, membership billing, and check-in for independent gyms and CrossFit boxes.',
+    features: [
+      'Class timetable with capacity caps and waitlists',
+      'Recurring membership billing via Stripe',
+      'QR check-in from a tablet at the door',
+      'Automated SMS/WhatsApp booking reminders',
+    ],
+    techStack: ['Next.js', 'Prisma', 'PostgreSQL', 'Stripe', 'Twilio'],
+    priceRange: '$149–$399 / month',
+    effort: 'HIGH',
+    notes: 'Strongest recurring-revenue idea in the vault. Start with booking only, add billing later.',
+    createdAt: new Date(Date.now() - 35 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'idv-2',
+    industryId: 'ind-1',
+    title: 'Trainer Client Progress Tracker',
+    category: 'SOFTWARE',
+    status: 'BACKLOG',
+    summary: 'Mobile-first logger where personal trainers record workouts, measurements, and photos per client.',
+    features: [
+      'Per-client workout plan builder',
+      'Progress photos and measurement history',
+      'Shareable client read-only dashboard',
+      'Check-in prompts between sessions',
+    ],
+    techStack: ['React Native', 'Supabase', 'Cloudinary'],
+    priceRange: '$19–$49 / trainer / month',
+    effort: 'MEDIUM',
+    notes: 'Good upsell to the gym OS, but trainors are price sensitive. Sell per-trainer seats.',
+    createdAt: new Date(Date.now() - 30 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'idv-3',
+    industryId: 'ind-1',
+    title: 'Gym Website + Local SEO Setup',
+    category: 'SERVICE',
+    status: 'BACKLOG',
+    summary: 'Fast marketing site with online trial signup and Google Business optimisation.',
+    features: [
+      'One-page site with class schedule embed',
+      'Free-trial lead capture form',
+      'Google Business Profile and local SEO setup',
+      'Review request automation',
+    ],
+    techStack: ['Next.js', 'Vercel', 'Google Business API'],
+    priceRange: '$1,800–$3,500 one-time',
+    effort: 'LOW',
+    notes: 'Ideal foot-in-the-door offer to land the bigger software build later.',
+    createdAt: new Date(Date.now() - 28 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+
+  // Auto Service
+  {
+    id: 'idv-4',
+    industryId: 'ind-2',
+    title: 'Garage Job Card & Vehicle History System',
+    category: 'SOFTWARE',
+    status: 'RESEARCHING',
+    summary: 'Digital job cards, per-vehicle service history, and automated customer status updates.',
+    features: [
+      'Vehicle profile with full service history by plate/VIN',
+      'Digital job card with parts and labour lines',
+      'Customer status link replacing phone updates',
+      'Scheduled maintenance reminders',
+    ],
+    techStack: ['Next.js', 'Prisma', 'PostgreSQL', 'Vercel'],
+    priceRange: '$99–$249 / month',
+    effort: 'HIGH',
+    notes: 'Vehicle history is the moat — once a garage logs a year of jobs they will not switch.',
+    createdAt: new Date(Date.now() - 33 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'idv-5',
+    industryId: 'ind-2',
+    title: 'Instant Quote Builder for Mechanics',
+    category: 'SOFTWARE',
+    status: 'BACKLOG',
+    summary: 'Pick a vehicle, pick the jobs, generate a branded PDF quote in under a minute.',
+    features: [
+      'Vehicle lookup pre-fills labour times',
+      'Predefined job and parts catalogue',
+      'Branded PDF quote export',
+      'Quote-to-job-card conversion',
+    ],
+    techStack: ['Next.js', 'react-pdf', 'KV storage'],
+    priceRange: '$29–$79 / month',
+    effort: 'MEDIUM',
+    notes: 'Small scope, quick to ship. Could be a standalone lead magnet.',
+    createdAt: new Date(Date.now() - 24 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'idv-6',
+    industryId: 'ind-2',
+    title: 'Mobile Detailing Booking Page',
+    category: 'SERVICE',
+    status: 'BACKLOG',
+    summary: 'Service-area based online booking for mobile detailers with deposit collection.',
+    features: [
+      'Postcode service-area checker',
+      'Package selection with add-ons',
+      'Deposit payment to lock the slot',
+      'Automated reminder the day before',
+    ],
+    techStack: ['Next.js', 'Stripe', 'Twilio'],
+    priceRange: '$900–$2,000 one-time',
+    effort: 'LOW',
+    notes: 'Very fast to deliver. Great portfolio piece for the trades niche.',
+    createdAt: new Date(Date.now() - 20 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+
+  // Barbershops & Salons
+  {
+    id: 'idv-7',
+    industryId: 'ind-3',
+    title: 'Chair Booking & No-Show Protection',
+    category: 'SOFTWARE',
+    status: 'BUILDING',
+    summary: 'Stylist-level booking with card-on-file deposits to eliminate costly no-shows.',
+    features: [
+      'Per-stylist calendar and availability',
+      'Card-on-file deposit at booking time',
+      'Automated 24h and 2h reminders',
+      'Client history notes attached to each chair',
+    ],
+    techStack: ['Next.js', 'Stripe', 'Prisma', 'PostgreSQL'],
+    priceRange: '$49–$149 / month',
+    effort: 'MEDIUM',
+    notes: 'Validate with 5 local shops before building the stylist seat model.',
+    createdAt: new Date(Date.now() - 26 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'idv-8',
+    industryId: 'ind-3',
+    title: 'Loyalty & Rebooking Nudges',
+    category: 'SOFTWARE',
+    status: 'BACKLOG',
+    summary: 'Tracks visit cadence and nudges clients to rebook before they drift away.',
+    features: [
+      'Visit frequency tracking per client',
+      'Auto WhatsApp nudge after usual rebooking window',
+      'Punch-card loyalty rewards',
+      'Win-back campaign for lapsed clients',
+    ],
+    techStack: ['Next.js', 'WhatsApp Cloud API', 'Prisma'],
+    priceRange: '$25–$69 / month',
+    effort: 'MEDIUM',
+    notes: 'Needs to plug into an existing booking system to be useful. Consider as an add-on module.',
+    createdAt: new Date(Date.now() - 18 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'idv-9',
+    industryId: 'ind-3',
+    title: 'Salon Instagram-to-Booking Funnel',
+    category: 'SERVICE',
+    status: 'BACKLOG',
+    summary: 'Link-in-bio booking page plus content templates tuned for salon owners.',
+    features: [
+      'Mobile-first booking landing page',
+      'Instagram link-in-bio setup',
+      'Editable Canva price-list templates',
+      'Google Business profile cleanup',
+    ],
+    techStack: ['Next.js', 'Vercel'],
+    priceRange: '$700–$1,500 one-time',
+    effort: 'LOW',
+    notes: 'Low-effort entry offer that naturally leads into the booking software.',
+    createdAt: new Date(Date.now() - 12 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+
+  // Restaurants & Cafés
+  {
+    id: 'idv-10',
+    industryId: 'ind-4',
+    title: 'Direct Ordering & Commission-Free Checkout',
+    category: 'SOFTWARE',
+    status: 'RESEARCHING',
+    summary: 'Branded ordering site that bypasses 25-30% delivery app commissions.',
+    features: [
+      'Pickup and local delivery ordering',
+      'Live menu with sold-out toggles',
+      'Stripe checkout with no per-order commission',
+      'Order printer / tablet notification',
+    ],
+    techStack: ['Next.js', 'Stripe', 'Sanity CMS', 'PostgreSQL'],
+    priceRange: '$79–$199 / month',
+    effort: 'HIGH',
+    notes: 'Pitch ROI is easy: one saved commission day pays for the year.',
+    createdAt: new Date(Date.now() - 22 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'idv-11',
+    industryId: 'ind-4',
+    title: 'Menu Sync & Price Manager',
+    category: 'SOFTWARE',
+    status: 'BACKLOG',
+    summary: 'Update the menu once and push it to the website, apps, and print layout.',
+    features: [
+      'Single source of truth for menu items and prices',
+      'Push to website and delivery platforms',
+      'Auto-generated print-ready menu PDF',
+      'Scheduled price-change history',
+    ],
+    techStack: ['Next.js', 'Prisma', 'react-pdf'],
+    priceRange: '$39–$99 / month',
+    effort: 'MEDIUM',
+    notes: 'Depends on platform APIs which change often — price in the maintenance burden.',
+    createdAt: new Date(Date.now() - 16 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'idv-12',
+    industryId: 'ind-4',
+    title: 'Restaurant Google Profile & Review Engine',
+    category: 'SERVICE',
+    status: 'BACKLOG',
+    summary: 'Local SEO plus automated review requests tied to the end of each order.',
+    features: [
+      'Google Business Profile optimisation',
+      'QR-code review request cards for tables',
+      'Automated post-order review email/SMS',
+      'Monthly local ranking report',
+    ],
+    techStack: ['Next.js', 'Google Business API', 'Resend'],
+    priceRange: '$500 setup + $150 / month',
+    effort: 'LOW',
+    notes: 'Recurring retainer from a simple deliverable. Good for cash flow.',
+    createdAt: new Date(Date.now() - 10 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+
+  // Dental & Medical
+  {
+    id: 'idv-13',
+    industryId: 'ind-5',
+    title: 'Clinic Appointment & No-Show Reduction Suite',
+    category: 'SOFTWARE',
+    status: 'PLANNED',
+    summary: 'Digital appointment book with deposit-backed booking and recall automation.',
+    features: [
+      'Multi-practitioner appointment calendar',
+      'Deposit or card-on-file for new patients',
+      'Automated reminders at 7d / 24h / 2h',
+      'Recall campaigns for overdue check-ups',
+    ],
+    techStack: ['Next.js', 'Prisma', 'PostgreSQL', 'Twilio', 'Stripe'],
+    priceRange: '$199–$499 / month',
+    effort: 'HIGH',
+    notes: 'Highest willingness to pay, but expects data handling guarantees. Budget for compliance review.',
+    createdAt: new Date(Date.now() - 15 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'idv-14',
+    industryId: 'ind-5',
+    title: 'Patient Recall Automation Service',
+    category: 'SERVICE',
+    status: 'BACKLOG',
+    summary: 'Managed recall campaigns for clinics that lack the staff time to chase patients.',
+    features: [
+      'Import and clean patient recall list',
+      'SMS/email recall sequence setup',
+      'Appointment booking link in every message',
+      'Monthly response and rebooking report',
+    ],
+    techStack: ['Twilio', 'Resend', 'Google Sheets'],
+    priceRange: '$400 setup + $200 / month',
+    effort: 'LOW',
+    notes: 'Service-first entry to earn trust before pitching the full software suite.',
+    createdAt: new Date(Date.now() - 8 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+
+  // Real Estate
+  {
+    id: 'idv-15',
+    industryId: 'ind-6',
+    title: 'Agency Lead Routing & Viewing Scheduler',
+    category: 'SOFTWARE',
+    status: 'BACKLOG',
+    summary: 'Captures buyer leads and instantly routes them to the right agent with a booking link.',
+    features: [
+      'Round-robin or area-based lead assignment',
+      'Self-serve viewing slot booking',
+      'Automated follow-up cadence after viewings',
+      'Per-agent conversion dashboard',
+    ],
+    techStack: ['Next.js', 'Prisma', 'PostgreSQL', 'Resend'],
+    priceRange: '$129–$349 / month',
+    effort: 'HIGH',
+    notes: 'Lead routing speed is the selling point — measure and show time-to-first-contact.',
+    createdAt: new Date(Date.now() - 12 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'idv-16',
+    industryId: 'ind-6',
+    title: 'Property Listing Site Generator',
+    category: 'SERVICE',
+    status: 'BACKLOG',
+    summary: 'Fast, SEO-tuned listing website generated from the agency’s existing portal feed.',
+    features: [
+      'Portal feed import (XML/CSV)',
+      'SEO-optimised listing and area pages',
+      'Enquiry forms routed to the agency inbox',
+      'Saved-search alert emails for buyers',
+    ],
+    techStack: ['Next.js', 'PostgreSQL', 'Vercel'],
+    priceRange: '$2,500–$6,000 one-time',
+    effort: 'MEDIUM',
+    notes: 'Larger one-off project; natural bridge into the retainer for ongoing changes.',
+    createdAt: new Date(Date.now() - 7 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+
+  // Logistics
+  {
+    id: 'idv-17',
+    industryId: 'ind-7',
+    title: 'Live Parcel Tracking & Dispatch Board',
+    category: 'SOFTWARE',
+    status: 'BACKLOG',
+    summary: 'Dispatcher board plus a public tracking link that ends the “where is my parcel” calls.',
+    features: [
+      'Drag-and-drop dispatch board for drivers',
+      'Public tracking page per consignment',
+      'Driver mobile app with proof of delivery',
+      'SMS notification on every status change',
+    ],
+    techStack: ['Next.js', 'React Native', 'Socket.IO', 'PostgreSQL'],
+    priceRange: '$249–$699 / month',
+    effort: 'HIGH',
+    notes: 'Real-time infrastructure raises complexity. Validate demand before committing.',
+    createdAt: new Date(Date.now() - 6 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'idv-18',
+    industryId: 'ind-7',
+    title: 'Fleet Compliance & Document Expiry Tracker',
+    category: 'SOFTWARE',
+    status: 'BACKLOG',
+    summary: 'Tracks MOT, insurance, and licence expiry per vehicle and driver with alerts.',
+    features: [
+      'Vehicle and driver document vault',
+      'Expiry alerts at 30/14/7 days',
+      'Photo upload from mobile',
+      'Audit-ready compliance export',
+    ],
+    techStack: ['Next.js', 'Prisma', 'S3 storage'],
+    priceRange: '$49–$149 / month per 10 vehicles',
+    effort: 'MEDIUM',
+    notes: 'Narrow scope and painful problem — a good candidate to ship quickly.',
+    createdAt: new Date(Date.now() - 4 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+
+  // Home Services
+  {
+    id: 'idv-19',
+    industryId: 'ind-8',
+    title: 'Trades Job Scheduling & Quote-to-Invoice Flow',
+    category: 'SOFTWARE',
+    status: 'BACKLOG',
+    summary: 'One flow from quote to scheduled job to paid invoice for small trade crews.',
+    features: [
+      'Quote builder with job templates',
+      'Crew scheduling with conflict warnings',
+      'On-site photo and signature capture',
+      'Invoice with online payment link',
+    ],
+    techStack: ['Next.js', 'Prisma', 'PostgreSQL', 'Stripe'],
+    priceRange: '$79–$229 / month',
+    effort: 'HIGH',
+    notes: 'Crowded market (Jobber, Tradify) — win on simplicity and local support.',
+    createdAt: new Date(Date.now() - 3 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'idv-20',
+    industryId: 'ind-8',
+    title: 'Instant Quote Website for Tradespeople',
+    category: 'SERVICE',
+    status: 'BACKLOG',
+    summary: 'Simple site with a guided quote calculator that captures qualified job enquiries.',
+    features: [
+      'Service selection with ballpark pricing',
+      'Photo upload so the job can be assessed remotely',
+      'Lead notification by email and SMS',
+      'Google Business Profile setup',
+    ],
+    techStack: ['Next.js', 'Vercel', 'Resend'],
+    priceRange: '$1,200–$2,800 one-time',
+    effort: 'LOW',
+    notes: 'Quick win to build trust, then upsell the scheduling software later.',
+    createdAt: new Date(Date.now() - 2 * 86400000).toISOString(),
+    updatedAt: new Date().toISOString(),
   },
 ]
 
@@ -2088,4 +2664,239 @@ export async function getDashboardMetrics(userId?: string, role?: string): Promi
     myAssignedProjectsCount,
     totalLeadsCount,
   }
+}
+
+// ==================== INDUSTRY IDEA VAULT ====================
+function mapIndustryIdea(a: any): IndustryIdea {
+  return {
+    ...a,
+    category: a.category as IndustryIdea['category'],
+    status: a.status as IndustryIdea['status'],
+    effort: a.effort as IndustryIdea['effort'],
+    features: a.features || [],
+    techStack: a.techStack || [],
+    notes: a.notes ?? null,
+    createdAt: a.createdAt.toISOString(),
+    updatedAt: a.updatedAt.toISOString(),
+  }
+}
+
+export async function getIndustries(): Promise<Industry[]> {
+  if (await checkDb()) {
+    try {
+      const dbIndustries = await prisma.industry.findMany({
+        orderBy: { createdAt: 'desc' },
+        include: { ideas: { orderBy: { createdAt: 'desc' } } },
+      })
+      return (dbIndustries as any[]).map((i: any) => ({
+        ...i,
+        painPoints: i.painPoints || [],
+        opportunities: i.opportunities || [],
+        ideas: (i.ideas || []).map(mapIndustryIdea),
+        ideaCount: (i.ideas || []).length,
+        createdAt: i.createdAt.toISOString(),
+        updatedAt: i.updatedAt.toISOString(),
+      }))
+    } catch {
+      // fallback
+    }
+  }
+  return memoryIndustries.map((i) => {
+    const ideas = memoryIndustryIdeas.filter((a) => a.industryId === i.id)
+    return { ...i, ideas, ideaCount: ideas.length }
+  })
+}
+
+export async function getIndustry(id: string): Promise<Industry | null> {
+  const industries = await getIndustries()
+  return industries.find((i) => i.id === id) || null
+}
+
+export async function createIndustry(data: Partial<Industry>): Promise<Industry> {
+  const newIndustry: Industry = {
+    id: `ind-${Date.now()}`,
+    name: data.name || 'New Industry',
+    emoji: data.emoji || '💡',
+    tagline: data.tagline || '',
+    painPoints: data.painPoints || [],
+    opportunities: data.opportunities || [],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  }
+
+  if (await checkDb()) {
+    try {
+      const created = await prisma.industry.create({
+        data: {
+          name: newIndustry.name,
+          emoji: newIndustry.emoji,
+          tagline: newIndustry.tagline,
+          painPoints: newIndustry.painPoints,
+          opportunities: newIndustry.opportunities,
+        },
+      })
+      newIndustry.id = created.id
+    } catch {
+      // fallback
+    }
+  }
+
+  memoryIndustries.unshift(newIndustry)
+  await logActivity('Industry Idea Added', 'INDUSTRY', newIndustry.id, `Added industry vertical: ${newIndustry.name}`)
+  return newIndustry
+}
+
+export async function updateIndustry(id: string, data: Partial<Industry>): Promise<Industry | null> {
+  const index = memoryIndustries.findIndex((i) => i.id === id)
+  if (index === -1) return null
+
+  memoryIndustries[index] = {
+    ...memoryIndustries[index],
+    ...data,
+    updatedAt: new Date().toISOString(),
+  }
+
+  if (await checkDb()) {
+    try {
+      await prisma.industry.update({
+        where: { id },
+        data: {
+          name: data.name,
+          emoji: data.emoji,
+          tagline: data.tagline,
+          painPoints: data.painPoints,
+          opportunities: data.opportunities,
+        },
+      })
+    } catch {
+      // fallback
+    }
+  }
+
+  await logActivity('Industry Idea Updated', 'INDUSTRY', id, `Updated industry vertical: ${memoryIndustries[index].name}`)
+  return memoryIndustries[index]
+}
+
+export async function deleteIndustry(id: string): Promise<boolean> {
+  const index = memoryIndustries.findIndex((i) => i.id === id)
+  if (index === -1) return false
+
+  const name = memoryIndustries[index].name
+  memoryIndustries.splice(index, 1)
+  memoryIndustryIdeas = memoryIndustryIdeas.filter((a) => a.industryId !== id)
+
+  if (await checkDb()) {
+    try {
+      await prisma.industry.delete({ where: { id } })
+    } catch {
+      // fallback
+    }
+  }
+
+  await logActivity('Industry Idea Removed', 'INDUSTRY', id, `Removed industry vertical: ${name}`)
+  return true
+}
+
+export async function createIndustryIdea(
+  industryId: string,
+  data: Partial<IndustryIdea>
+): Promise<IndustryIdea | null> {
+  const industry = memoryIndustries.find((i) => i.id === industryId)
+  if (!industry) return null
+
+  const newIdea: IndustryIdea = {
+    id: `idv-${Date.now()}`,
+    industryId,
+    title: data.title || 'Untitled Idea',
+    category: data.category || 'SOFTWARE',
+    status: data.status || 'BACKLOG',
+    summary: data.summary || '',
+    features: data.features || [],
+    techStack: data.techStack || [],
+    priceRange: data.priceRange || 'TBD',
+    effort: data.effort || 'MEDIUM',
+    notes: data.notes || null,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  }
+
+  if (await checkDb()) {
+    try {
+      const created = await prisma.industryIdea.create({
+        data: {
+          industryId: newIdea.industryId,
+          title: newIdea.title,
+          category: newIdea.category,
+          status: newIdea.status,
+          summary: newIdea.summary,
+          features: newIdea.features,
+          techStack: newIdea.techStack,
+          priceRange: newIdea.priceRange,
+          effort: newIdea.effort,
+          notes: newIdea.notes,
+        },
+      })
+      newIdea.id = created.id
+    } catch {
+      // fallback
+    }
+  }
+
+  memoryIndustryIdeas.unshift(newIdea)
+  await logActivity('Software Idea Added', 'INDUSTRY', industryId, `New ${newIdea.category.toLowerCase()} idea: ${newIdea.title}`)
+  return newIdea
+}
+
+export async function updateIndustryIdea(
+  id: string,
+  data: Partial<IndustryIdea>
+): Promise<IndustryIdea | null> {
+  const index = memoryIndustryIdeas.findIndex((a) => a.id === id)
+  if (index === -1) return null
+
+  memoryIndustryIdeas[index] = {
+    ...memoryIndustryIdeas[index],
+    ...data,
+    updatedAt: new Date().toISOString(),
+  }
+
+  if (await checkDb()) {
+    try {
+      await prisma.industryIdea.update({
+        where: { id },
+        data: {
+          title: data.title,
+          category: data.category,
+          status: data.status,
+          summary: data.summary,
+          features: data.features,
+          techStack: data.techStack,
+          priceRange: data.priceRange,
+          effort: data.effort,
+          notes: data.notes,
+        },
+      })
+    } catch {
+      // fallback
+    }
+  }
+
+  return memoryIndustryIdeas[index]
+}
+
+export async function deleteIndustryIdea(id: string): Promise<boolean> {
+  const index = memoryIndustryIdeas.findIndex((a) => a.id === id)
+  if (index === -1) return false
+
+  memoryIndustryIdeas.splice(index, 1)
+
+  if (await checkDb()) {
+    try {
+      await prisma.industryIdea.delete({ where: { id } })
+    } catch {
+      // fallback
+    }
+  }
+
+  return true
 }

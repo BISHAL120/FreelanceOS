@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
-import type { DashboardMetrics } from '@/lib/types'
+import type { DashboardMetrics, Industry } from '@/lib/types'
 import {
   ArrowRight,
   ArrowUpRight,
@@ -17,6 +17,8 @@ import {
   Code2,
   DollarSign,
   FolderKanban,
+  Layers,
+  Lightbulb,
   MessageSquare,
   Play,
   Plus,
@@ -38,6 +40,7 @@ import {
 
 export default function DashboardPage() {
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null)
+  const [industries, setIndustries] = useState<Industry[]>([])
   const [loading, setLoading] = useState(true)
   const [quickActionOpen, setQuickActionOpen] = useState(false)
   const [actionType, setActionType] = useState<'client' | 'project' | 'lead' | 'task' | 'invoice'>('task')
@@ -46,10 +49,16 @@ export default function DashboardPage() {
 
   const fetchMetrics = async () => {
     try {
-      const res = await fetch(`/api/dashboard?userId=${currentUser.id}&role=${currentUser.role}`)
+      const [res, ideasRes] = await Promise.all([
+        fetch(`/api/dashboard?userId=${currentUser.id}&role=${currentUser.role}`),
+        fetch('/api/industries'),
+      ])
       if (res.ok) {
         const data = await res.json()
         setMetrics(data)
+      }
+      if (ideasRes.ok) {
+        setIndustries(await ideasRes.json())
       }
     } catch {
       // ignore
@@ -128,6 +137,14 @@ export default function DashboardPage() {
       </div>
     )
   }
+
+  const vaultIdeas = industries.flatMap((i) => i.ideas || [])
+  const vaultIdeaCount = vaultIdeas.length
+  const vaultSoftware = vaultIdeas.filter((i) => i.category === 'SOFTWARE').length
+  const vaultServices = vaultIdeas.filter((i) => i.category === 'SERVICE').length
+  const vaultTopIndustries = [...industries]
+    .sort((a, b) => (b.ideas?.length || 0) - (a.ideas?.length || 0))
+    .slice(0, 4)
 
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -408,6 +425,102 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
           </div>
+
+          {/* Idea Vault — Strategy & Future Product Plans */}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-2 sm:pb-3">
+              <div>
+                <CardTitle className="text-sm sm:text-base font-semibold flex items-center gap-2">
+                  <Lightbulb className="h-4 w-4 text-primary" /> Idea Vault
+                </CardTitle>
+                <CardDescription className="text-[11px] sm:text-xs">
+                  Target industries and the software or services you can sell them
+                </CardDescription>
+              </div>
+              <Link href="/ideas">
+                <Button variant="outline" size="sm" className="h-7 sm:h-8 text-xs gap-1 px-2.5 sm:px-3">
+                  Open Vault <ArrowRight className="h-3 w-3" />
+                </Button>
+              </Link>
+            </CardHeader>
+            <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0 space-y-3 sm:space-y-4">
+              {/* Vault counters */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <div className="p-2.5 rounded-lg border border-border bg-muted/20">
+                  <span className="text-[10px] text-muted-foreground block font-medium">Industries</span>
+                  <span className="text-base sm:text-lg font-semibold text-foreground font-mono">
+                    {industries.length}
+                  </span>
+                </div>
+                <div className="p-2.5 rounded-lg border border-border bg-muted/20">
+                  <span className="text-[10px] text-muted-foreground block font-medium">Ideas</span>
+                  <span className="text-base sm:text-lg font-semibold text-foreground font-mono">
+                    {vaultIdeaCount}
+                  </span>
+                </div>
+                <div className="p-2.5 rounded-lg border border-border bg-muted/20">
+                  <span className="text-[10px] text-muted-foreground block font-medium">Software</span>
+                  <span className="text-base sm:text-lg font-semibold text-foreground font-mono">
+                    {vaultSoftware}
+                  </span>
+                </div>
+                <div className="p-2.5 rounded-lg border border-border bg-muted/20">
+                  <span className="text-[10px] text-muted-foreground block font-medium">Services</span>
+                  <span className="text-base sm:text-lg font-semibold text-foreground font-mono">
+                    {vaultServices}
+                  </span>
+                </div>
+              </div>
+
+              {/* Top industry verticals */}
+              {industries.length === 0 ? (
+                <div className="p-6 rounded-lg border border-dashed border-border text-center text-xs text-muted-foreground">
+                  No industries mapped yet.{' '}
+                  <Link href="/ideas" className="text-foreground hover:underline font-medium">
+                    Start brainstorming →
+                  </Link>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <span className="text-[11px] sm:text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
+                    <Layers className="h-3.5 w-3.5" /> Top Verticals By Idea Volume
+                  </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {vaultTopIndustries.map((ind) => {
+                      const ideaCount = ind.ideas?.length || 0
+                      const leadIdea = ind.ideas?.[0]
+                      return (
+                        <Link
+                          key={ind.id}
+                          href="/ideas"
+                          className="p-2.5 rounded-lg border border-border bg-card hover:border-foreground/30 hover:shadow-xs transition flex items-start gap-2.5"
+                        >
+                          <span className="h-7 w-7 rounded border border-border bg-muted/40 flex items-center justify-center text-sm shrink-0">
+                            {ind.emoji}
+                          </span>
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="text-xs font-semibold text-foreground truncate">
+                                {ind.name}
+                              </span>
+                              <Badge variant="secondary" className="text-[9px] h-4 px-1.5 font-normal shrink-0">
+                                {ideaCount}
+                              </Badge>
+                            </div>
+                            {leadIdea && (
+                              <p className="text-[10px] text-muted-foreground truncate mt-0.5">
+                                {leadIdea.title}
+                              </p>
+                            )}
+                          </div>
+                        </Link>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </>
       )}
 
