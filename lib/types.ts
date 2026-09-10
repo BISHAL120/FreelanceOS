@@ -3,6 +3,7 @@ export type UserRole = 'ADMIN' | 'LEAD_GEN' | 'DEVELOPER'
 export type ClientStatus = 'LEAD' | 'ACTIVE' | 'PAUSED' | 'COMPLETED' | 'ARCHIVED'
 export type LeadStage = 'NEW' | 'CONTACTED' | 'QUALIFIED' | 'PROPOSAL_SENT' | 'NEGOTIATING' | 'WON' | 'LOST'
 export type LeadActivityType = 'NOTE' | 'MESSAGE_SENT' | 'REPLY_RECEIVED' | 'FOLLOW_UP' | 'CALL'
+export type LeadActivityChannel = 'WhatsApp' | 'Telegram' | 'LinkedIn' | 'Messenger' | 'Email' | 'Phone' | 'Other'
 export type ProjectStatus = 'PLANNING' | 'ACTIVE' | 'REVIEW' | 'COMPLETED' | 'PAUSED'
 export type TaskStatus = 'TODO' | 'IN_PROGRESS' | 'REVIEW' | 'DONE'
 export type TaskPriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT'
@@ -49,6 +50,7 @@ export interface LeadActivity {
   id: string
   leadId: string
   type: LeadActivityType
+  channel?: LeadActivityChannel | null
   title: string
   content: string
   imageUrl?: string | null

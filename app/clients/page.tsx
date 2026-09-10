@@ -1,35 +1,16 @@
 "use client"
 
-import React, { useEffect, useState } from 'react'
-import Link from 'next/link'
-import {
-  Users,
-  Plus,
-  Mail,
-  Phone,
-  Globe,
-  MapPin,
-  ExternalLink,
-  Search,
-  Filter,
-  Briefcase,
-  DollarSign,
-  MoreVertical,
-  Trash2,
-  FolderKanban,
-} from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from '@/components/ui/dialog'
-import { Textarea } from '@/components/ui/textarea'
+import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
@@ -37,7 +18,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 import type { Client, ClientStatus } from '@/lib/types'
+import {
+  ExternalLink,
+  Globe,
+  Mail,
+  MapPin,
+  Phone,
+  Plus,
+  Search,
+  Trash2
+} from 'lucide-react'
+import Link from 'next/link'
+import React, { useEffect, useState } from 'react'
 
 export default function ClientsPage() {
   const [clients, setClients] = useState<Client[]>([])
@@ -46,6 +40,7 @@ export default function ClientsPage() {
   const [statusFilter, setStatusFilter] = useState<string>('ALL')
   const [dialogOpen, setDialogOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [deleteTarget, setDeleteTarget] = useState<Client | null>(null)
 
   // Form states
   const [name, setName] = useState('')
@@ -118,13 +113,15 @@ export default function ClientsPage() {
     }
   }
 
-  const handleDeleteClient = async (id: string, clientName: string) => {
-    if (!confirm(`Are you sure you want to remove ${clientName}?`)) return
+  const handleDeleteClient = async () => {
+    if (!deleteTarget) return
     try {
-      await fetch(`/api/clients/${id}`, { method: 'DELETE' })
+      await fetch(`/api/clients/${deleteTarget.id}`, { method: 'DELETE' })
       fetchClients()
     } catch {
       // ignore
+    } finally {
+      setDeleteTarget(null)
     }
   }
 
@@ -166,7 +163,7 @@ export default function ClientsPage() {
           />
         </div>
         <Select value={statusFilter} onValueChange={(v) => v && setStatusFilter(v)}>
-          <SelectTrigger className="w-[160px] h-9 text-xs">
+          <SelectTrigger className="w-40 h-9 text-xs">
             <SelectValue placeholder="All Statuses" />
           </SelectTrigger>
           <SelectContent>
@@ -182,7 +179,7 @@ export default function ClientsPage() {
       {/* Clients Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-5">
         {filteredClients.map((client) => (
-          <Card key={client.id} className="hover:shadow-md transition-shadow flex flex-col justify-between">
+          <Card key={client.id} className="border border-border hover:shadow-md transition-shadow flex flex-col justify-between">
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between gap-2">
                 <div>
@@ -203,8 +200,8 @@ export default function ClientsPage() {
                   </CardDescription>
                 </div>
                 <button
-                  onClick={() => handleDeleteClient(client.id, client.name)}
-                  className="text-muted-foreground/40 hover:text-destructive transition p-1"
+                  onClick={() => setDeleteTarget(client)}
+                  className="border border-slate-700 hover:text-destructive transition p-2"
                   title="Remove client"
                 >
                   <Trash2 className="h-3.5 w-3.5" />
@@ -266,7 +263,7 @@ export default function ClientsPage() {
               )}
             </CardContent>
 
-            <div className="p-4 pt-0 border-t mt-3 flex items-center justify-between gap-2">
+            <div className="p-4 pt-0 mt-3 flex items-center justify-between gap-2">
               <Link href={`/clients/${client.id}`} className="flex-1">
                 <Button variant="outline" size="sm" className="w-full text-xs h-8">
                   View Profile & Work
@@ -279,7 +276,7 @@ export default function ClientsPage() {
 
       {/* Add Client Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="w-[95vw] sm:max-w-[500px] max-h-[90vh] overflow-y-auto p-4 sm:p-6">
+        <DialogContent className="w-[95vw] sm:max-w-125 max-h-[90vh] overflow-y-auto p-4 sm:p-6">
           <DialogHeader>
             <DialogTitle>Add New Client Profile</DialogTitle>
             <DialogDescription>Add a new freelance client to your workspace records.</DialogDescription>
@@ -396,6 +393,30 @@ export default function ClientsPage() {
               </Button>
             </div>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
+        <DialogContent className="w-[95vw] sm:max-w-sm p-4 sm:p-5">
+          <DialogHeader>
+            <DialogTitle>Delete Client</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to remove{' '}
+              <span className="font-medium text-foreground">
+                {deleteTarget?.companyName || deleteTarget?.name}
+              </span>
+              ? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end gap-2 pt-2">
+            <Button variant="outline" size="sm" onClick={() => setDeleteTarget(null)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" size="sm" onClick={handleDeleteClient}>
+              Delete
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

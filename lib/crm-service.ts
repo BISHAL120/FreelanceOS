@@ -1983,6 +1983,7 @@ export async function createLeadActivity(leadId: string, data: Partial<LeadActiv
     id: `act-lead-${Date.now()}`,
     leadId,
     type: data.type || 'NOTE',
+    channel: data.channel || null,
     title: data.title || 'Lead Update Logged',
     content: data.content || '',
     imageUrl: data.imageUrl || null,
@@ -1997,6 +1998,7 @@ export async function createLeadActivity(leadId: string, data: Partial<LeadActiv
         data: {
           leadId: newActivity.leadId,
           type: newActivity.type,
+          channel: newActivity.channel,
           title: newActivity.title,
           content: newActivity.content,
           imageUrl: newActivity.imageUrl,

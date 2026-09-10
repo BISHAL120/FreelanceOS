@@ -180,6 +180,7 @@ model LeadActivity {
   lead            Lead             @relation(fields: [leadId], references: [id], onDelete: Cascade)
   leadId          String
   type            LeadActivityType @default(NOTE)
+  channel         String?
   title           String
   content         String
   imageUrl        String?

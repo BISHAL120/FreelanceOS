@@ -1,48 +1,40 @@
 "use client"
 
-import React, { useEffect, useState } from 'react'
-import Link from 'next/link'
+import { useAuth } from '@/components/auth-context'
+import { QuickActionDialog } from '@/components/quick-action-dialog'
+import { useTimer } from '@/components/timer-context'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Progress } from '@/components/ui/progress'
+import type { DashboardMetrics } from '@/lib/types'
 import {
-  DollarSign,
-  Users,
-  FolderKanban,
-  Clock,
+  ArrowRight,
   ArrowUpRight,
   CheckCircle2,
-  AlertCircle,
   CheckSquare,
-  Plus,
-  Play,
-  Pause,
-  Target,
-  FileText,
-  Activity,
-  Calendar,
-  Sparkles,
-  Briefcase,
+  Clock,
   Code2,
-  ShieldCheck,
-  ArrowRight,
+  DollarSign,
+  FolderKanban,
   MessageSquare,
-  Send,
+  Play,
+  Plus,
+  Sparkles,
+  Target,
+  Users
 } from 'lucide-react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import {
-  ResponsiveContainer,
-  AreaChart,
   Area,
+  AreaChart,
+  CartesianGrid,
+  Tooltip as RechartsTooltip,
+  ResponsiveContainer,
   XAxis,
   YAxis,
-  Tooltip as RechartsTooltip,
-  CartesianGrid,
 } from 'recharts'
-import { useTimer } from '@/components/timer-context'
-import { useAuth } from '@/components/auth-context'
-import type { DashboardMetrics } from '@/lib/types'
-import { QuickActionDialog } from '@/components/quick-action-dialog'
 
 export default function DashboardPage() {
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null)
@@ -147,8 +139,8 @@ export default function DashboardPage() {
               {isLeadGen
                 ? `Lead Generation Suite`
                 : isDeveloper
-                ? `Developer Workspace`
-                : `Agency Overview`}
+                  ? `Developer Workspace`
+                  : `Agency Overview`}
             </h1>
             <Badge
               variant="outline"
@@ -156,8 +148,8 @@ export default function DashboardPage() {
                 isAdmin
                   ? 'border-purple-500/30 text-purple-600 bg-purple-500/10 text-[10px] sm:text-xs'
                   : isLeadGen
-                  ? 'border-emerald-500/30 text-emerald-600 bg-emerald-500/10 text-[10px] sm:text-xs'
-                  : 'border-blue-500/30 text-blue-600 bg-blue-500/10 text-[10px] sm:text-xs'
+                    ? 'border-emerald-500/30 text-emerald-600 bg-emerald-500/10 text-[10px] sm:text-xs'
+                    : 'border-blue-500/30 text-blue-600 bg-blue-500/10 text-[10px] sm:text-xs'
               }
             >
               {currentUser.role}
@@ -220,14 +212,14 @@ export default function DashboardPage() {
         <>
           {/* KPI Grid - 2x2 High Density on Mobile */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
-            <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-1 sm:pb-2 space-y-0">
+            <Card className="hover:shadow-md transition-shadow [--card-spacing:--spacing(2)]">
+              <CardHeader className="flex flex-row items-center justify-between p-2.5 sm:p-3 pb-1 space-y-0">
                 <CardTitle className="text-[11px] sm:text-xs font-medium text-muted-foreground line-clamp-1">Total Revenue</CardTitle>
                 <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0">
                   <DollarSign className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </CardHeader>
-              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+              <CardContent className="p-2.5 sm:p-3 pt-0 sm:pt-0">
                 <div className="text-lg sm:text-2xl font-bold text-foreground truncate">
                   ${metrics.totalRevenue.toLocaleString()}
                 </div>
@@ -240,14 +232,14 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-1 sm:pb-2 space-y-0">
+            <Card className="hover:shadow-md transition-shadow [--card-spacing:--spacing(2)]">
+              <CardHeader className="flex flex-row items-center justify-between p-2.5 sm:p-3 pb-1 space-y-0">
                 <CardTitle className="text-[11px] sm:text-xs font-medium text-muted-foreground line-clamp-1">Clients & Projects</CardTitle>
                 <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-blue-500/10 text-blue-600 flex items-center justify-center shrink-0">
                   <FolderKanban className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </CardHeader>
-              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+              <CardContent className="p-2.5 sm:p-3 pt-0 sm:pt-0">
                 <div className="text-lg sm:text-2xl font-bold text-foreground truncate">
                   {metrics.activeClientsCount} / {metrics.activeProjectsCount}
                 </div>
@@ -257,14 +249,14 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-1 sm:pb-2 space-y-0">
+            <Card className="hover:shadow-md transition-shadow [--card-spacing:--spacing(2)]">
+              <CardHeader className="flex flex-row items-center justify-between p-2.5 sm:p-3 pb-1 space-y-0">
                 <CardTitle className="text-[11px] sm:text-xs font-medium text-muted-foreground line-clamp-1">Unbilled Hours</CardTitle>
                 <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center shrink-0">
                   <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </CardHeader>
-              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+              <CardContent className="p-2.5 sm:p-3 pt-0 sm:pt-0">
                 <div className="text-lg sm:text-2xl font-bold text-foreground truncate">
                   {metrics.unbilledHours} hrs
                 </div>
@@ -274,14 +266,14 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-1 sm:pb-2 space-y-0">
+            <Card className="hover:shadow-md transition-shadow [--card-spacing:--spacing(2)]">
+              <CardHeader className="flex flex-row items-center justify-between p-2.5 sm:p-3 pb-1 space-y-0">
                 <CardTitle className="text-[11px] sm:text-xs font-medium text-muted-foreground line-clamp-1">Pipeline Value</CardTitle>
                 <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-purple-500/10 text-purple-600 flex items-center justify-center shrink-0">
                   <Target className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </CardHeader>
-              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+              <CardContent className="p-2.5 sm:p-3 pt-0 sm:pt-0">
                 <div className="text-lg sm:text-2xl font-bold text-foreground truncate">
                   ${metrics.pipelineValue.toLocaleString()}
                 </div>
@@ -396,11 +388,10 @@ export default function DashboardPage() {
                         <div className="flex items-center gap-2 mt-1">
                           <Badge
                             variant="secondary"
-                            className={`text-[9px] px-1 py-0 ${
-                              task.priority === 'URGENT'
+                            className={`text-[9px] px-1 py-0 ${task.priority === 'URGENT'
                                 ? 'bg-red-500/10 text-red-600 border-red-500/20'
                                 : 'bg-amber-500/10 text-amber-600 border-amber-500/20'
-                            }`}
+                              }`}
                           >
                             {task.priority}
                           </Badge>
@@ -426,14 +417,14 @@ export default function DashboardPage() {
       {isLeadGen && (
         <>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
-            <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-1 sm:pb-2 space-y-0">
+            <Card className="hover:shadow-md transition-shadow [--card-spacing:--spacing(2)]">
+              <CardHeader className="flex flex-row items-center justify-between p-2.5 sm:p-3 pb-1 space-y-0">
                 <CardTitle className="text-[11px] sm:text-xs font-medium text-muted-foreground line-clamp-1">Pipeline Value</CardTitle>
                 <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0">
                   <Target className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </CardHeader>
-              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+              <CardContent className="p-2.5 sm:p-3 pt-0 sm:pt-0">
                 <div className="text-lg sm:text-2xl font-bold text-foreground truncate">
                   ${metrics.pipelineValue.toLocaleString()}
                 </div>
@@ -443,14 +434,14 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-1 sm:pb-2 space-y-0">
+            <Card className="hover:shadow-md transition-shadow [--card-spacing:--spacing(2)]">
+              <CardHeader className="flex flex-row items-center justify-between p-2.5 sm:p-3 pb-1 space-y-0">
                 <CardTitle className="text-[11px] sm:text-xs font-medium text-muted-foreground line-clamp-1">Pipeline Leads</CardTitle>
                 <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-blue-500/10 text-blue-600 flex items-center justify-center shrink-0">
                   <Users className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </CardHeader>
-              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+              <CardContent className="p-2.5 sm:p-3 pt-0 sm:pt-0">
                 <div className="text-lg sm:text-2xl font-bold text-foreground truncate">
                   {metrics.totalLeadsCount || 4} Leads
                 </div>
@@ -460,14 +451,14 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-1 sm:pb-2 space-y-0">
+            <Card className="hover:shadow-md transition-shadow [--card-spacing:--spacing(2)]">
+              <CardHeader className="flex flex-row items-center justify-between p-2.5 sm:p-3 pb-1 space-y-0">
                 <CardTitle className="text-[11px] sm:text-xs font-medium text-muted-foreground line-clamp-1">My Lead Tasks</CardTitle>
                 <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center shrink-0">
                   <CheckSquare className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </CardHeader>
-              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+              <CardContent className="p-2.5 sm:p-3 pt-0 sm:pt-0">
                 <div className="text-lg sm:text-2xl font-bold text-foreground truncate">
                   {metrics.myAssignedTasksCount || 2} Tasks
                 </div>
@@ -477,14 +468,14 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-1 sm:pb-2 space-y-0">
+            <Card className="hover:shadow-md transition-shadow [--card-spacing:--spacing(2)]">
+              <CardHeader className="flex flex-row items-center justify-between p-2.5 sm:p-3 pb-1 space-y-0">
                 <CardTitle className="text-[11px] sm:text-xs font-medium text-muted-foreground line-clamp-1">Conversion Rate</CardTitle>
                 <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-purple-500/10 text-purple-600 flex items-center justify-center shrink-0">
                   <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </CardHeader>
-              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+              <CardContent className="p-2.5 sm:p-3 pt-0 sm:pt-0">
                 <div className="text-lg sm:text-2xl font-bold text-foreground truncate">
                   25.0%
                 </div>
@@ -577,14 +568,14 @@ export default function DashboardPage() {
       {isDeveloper && (
         <>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
-            <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-1 sm:pb-2 space-y-0">
+            <Card className="hover:shadow-md transition-shadow [--card-spacing:--spacing(2)]">
+              <CardHeader className="flex flex-row items-center justify-between p-2.5 sm:p-3 pb-1 space-y-0">
                 <CardTitle className="text-[11px] sm:text-xs font-medium text-muted-foreground line-clamp-1">My Projects</CardTitle>
                 <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-blue-500/10 text-blue-600 flex items-center justify-center shrink-0">
                   <FolderKanban className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </CardHeader>
-              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+              <CardContent className="p-2.5 sm:p-3 pt-0 sm:pt-0">
                 <div className="text-lg sm:text-2xl font-bold text-foreground truncate">
                   {metrics.myAssignedProjectsCount || 2} Projects
                 </div>
@@ -594,14 +585,14 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-1 sm:pb-2 space-y-0">
+            <Card className="hover:shadow-md transition-shadow [--card-spacing:--spacing(2)]">
+              <CardHeader className="flex flex-row items-center justify-between p-2.5 sm:p-3 pb-1 space-y-0">
                 <CardTitle className="text-[11px] sm:text-xs font-medium text-muted-foreground line-clamp-1">Active Tasks</CardTitle>
                 <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center shrink-0">
                   <CheckSquare className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </CardHeader>
-              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+              <CardContent className="p-2.5 sm:p-3 pt-0 sm:pt-0">
                 <div className="text-lg sm:text-2xl font-bold text-foreground truncate">
                   {metrics.myAssignedTasksCount || 2} Tasks
                 </div>
@@ -611,14 +602,14 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-1 sm:pb-2 space-y-0">
+            <Card className="hover:shadow-md transition-shadow [--card-spacing:--spacing(2)]">
+              <CardHeader className="flex flex-row items-center justify-between p-2.5 sm:p-3 pb-1 space-y-0">
                 <CardTitle className="text-[11px] sm:text-xs font-medium text-muted-foreground line-clamp-1">Work Tracker</CardTitle>
                 <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0">
                   <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </CardHeader>
-              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+              <CardContent className="p-2.5 sm:p-3 pt-0 sm:pt-0">
                 <div className="text-lg sm:text-2xl font-bold text-foreground font-mono truncate">
                   {formatTimer(seconds)}
                 </div>
@@ -628,14 +619,14 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-md transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-6 pb-1 sm:pb-2 space-y-0">
+            <Card className="hover:shadow-md transition-shadow [--card-spacing:--spacing(2)]">
+              <CardHeader className="flex flex-row items-center justify-between p-2.5 sm:p-3 pb-1 space-y-0">
                 <CardTitle className="text-[11px] sm:text-xs font-medium text-muted-foreground line-clamp-1">Hourly Rate</CardTitle>
                 <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-purple-500/10 text-purple-600 flex items-center justify-center shrink-0">
                   <Code2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </CardHeader>
-              <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+              <CardContent className="p-2.5 sm:p-3 pt-0 sm:pt-0">
                 <div className="text-lg sm:text-2xl font-bold text-foreground truncate">
                   ${currentUser.hourlyRate || 95}/hr
                 </div>
@@ -683,8 +674,8 @@ export default function DashboardPage() {
                               t.status === 'IN_PROGRESS'
                                 ? 'bg-amber-500/15 text-amber-600 border-amber-500/30'
                                 : t.status === 'DONE'
-                                ? 'bg-emerald-500/15 text-emerald-600'
-                                : 'bg-muted text-muted-foreground'
+                                  ? 'bg-emerald-500/15 text-emerald-600'
+                                  : 'bg-muted text-muted-foreground'
                             }
                           >
                             {t.status}

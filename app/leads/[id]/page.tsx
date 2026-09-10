@@ -8,7 +8,7 @@ import {
   Mail,
   Phone,
   Building2,
-  Calendar,
+  Calendar as CalendarIcon,
   Clock,
   Send,
   Image as ImageIcon,
@@ -29,8 +29,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { format } from 'date-fns'
+import { Calendar } from '@/components/ui/calendar'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
 import { useAuth } from '@/components/auth-context'
-import type { Lead, LeadStage, LeadActivity, LeadActivityType } from '@/lib/types'
+import type { Lead, LeadStage, LeadActivity, LeadActivityType, LeadActivityChannel } from '@/lib/types'
+
+const CHANNELS: LeadActivityChannel[] = [
+  'WhatsApp',
+  'Telegram',
+  'LinkedIn',
+  'Messenger',
+  'Email',
+  'Phone',
+  'Other',
+]
 
 const STAGES: { key: LeadStage; label: string }[] = [
   { key: 'NEW', label: 'New Inbound' },
@@ -55,10 +72,11 @@ export default function LeadDetailPage() {
 
   // Composer states
   const [actType, setActType] = useState<LeadActivityType>('MESSAGE_SENT')
+  const [actChannel, setActChannel] = useState<LeadActivityChannel>('WhatsApp')
   const [actTitle, setActTitle] = useState('')
   const [actContent, setActContent] = useState('')
   const [actImage, setActImage] = useState<string | null>(null)
-  const [nextFollowUpDate, setNextFollowUpDate] = useState('')
+  const [nextFollowUpDate, setNextFollowUpDate] = useState<Date>()
   const [loggingActivity, setLoggingActivity] = useState(false)
 
   const fetchLeadData = async () => {
@@ -71,7 +89,7 @@ export default function LeadDetailPage() {
         const lData = await lRes.json()
         setLead(lData)
         if (lData.nextFollowUp) {
-          setNextFollowUpDate(lData.nextFollowUp.split('T')[0])
+          setNextFollowUpDate(new Date(lData.nextFollowUp))
         }
       }
       if (aRes.ok) {
@@ -121,12 +139,13 @@ export default function LeadDetailPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           type: actType,
+          channel: actChannel,
           title: actTitle,
           content: actContent,
           imageUrl: actImage,
           authorName: currentUser.name,
           authorId: currentUser.id,
-          nextFollowUp: nextFollowUpDate ? new Date(nextFollowUpDate).toISOString() : null,
+          nextFollowUp: nextFollowUpDate ? nextFollowUpDate.toISOString() : null,
         }),
       })
 
@@ -136,7 +155,7 @@ export default function LeadDetailPage() {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              nextFollowUp: new Date(nextFollowUpDate).toISOString(),
+              nextFollowUp: nextFollowUpDate.toISOString(),
             }),
           })
         }
@@ -144,6 +163,8 @@ export default function LeadDetailPage() {
         setActTitle('')
         setActContent('')
         setActImage(null)
+        setActChannel('WhatsApp')
+        setNextFollowUpDate(undefined)
         fetchLeadData()
       }
     } catch {
@@ -428,6 +449,26 @@ export default function LeadDetailPage() {
                 </div>
               </div>
 
+              <div>
+                <label className="text-[11px] text-muted-foreground block mb-1">Conversation Channel</label>
+                <div className="flex flex-wrap gap-1">
+                  {CHANNELS.map((channel) => (
+                    <button
+                      key={channel}
+                      type="button"
+                      onClick={() => setActChannel(channel)}
+                      className={`text-xs px-2.5 py-1 rounded border transition ${
+                        actChannel === channel
+                          ? 'bg-foreground text-background font-medium border-foreground'
+                          : 'bg-muted/20 text-muted-foreground border-border hover:bg-muted/40'
+                      }`}
+                    >
+                      {channel}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="text-[11px] text-muted-foreground">Summary *</label>
@@ -441,12 +482,37 @@ export default function LeadDetailPage() {
                 </div>
                 <div>
                   <label className="text-[11px] text-muted-foreground">Next Follow-Up Date</label>
-                  <Input
-                    type="date"
-                    value={nextFollowUpDate}
-                    onChange={(e) => setNextFollowUpDate(e.target.value)}
-                    className="h-8 text-xs mt-1"
-                  />
+                  <Popover>
+                    <PopoverTrigger
+                      render={<Button variant="outline" size="sm" />}
+                      className="mt-1 w-full justify-start px-2.5 text-left font-normal normal-case tracking-normal h-8"
+                    >
+                      <CalendarIcon className="h-3.5 w-3.5 text-muted-foreground" />
+                      {nextFollowUpDate ? (
+                        format(nextFollowUpDate, 'MMM d, yyyy')
+                      ) : (
+                        <span className="text-muted-foreground">Pick a date</span>
+                      )}
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={nextFollowUpDate}
+                        onSelect={setNextFollowUpDate}
+                        defaultMonth={nextFollowUpDate}
+                        disabled={{ before: new Date() }}
+                      />
+                      {nextFollowUpDate && (
+                        <button
+                          type="button"
+                          onClick={() => setNextFollowUpDate(undefined)}
+                          className="w-full px-3 py-2 text-center text-[11px] text-muted-foreground hover:text-foreground transition"
+                        >
+                          Clear date
+                        </button>
+                      )}
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
 
@@ -475,8 +541,8 @@ export default function LeadDetailPage() {
                 </label>
                 <div className="mt-1">
                   {actImage ? (
-                    <div className="rounded border border-border overflow-hidden max-h-32 max-w-xs">
-                      <img src={actImage} alt="Attachment" className="w-full h-auto object-cover" />
+                    <div className="rounded border border-border overflow-hidden">
+                      <img src={actImage} alt="Attachment" className="w-full h-auto object-contain" />
                     </div>
                   ) : (
                     <label className="flex items-center gap-1.5 p-2 rounded border border-dashed border-border hover:bg-muted/30 transition cursor-pointer text-xs text-muted-foreground">
@@ -515,6 +581,11 @@ export default function LeadDetailPage() {
                         <Badge variant="outline" className="text-[10px] font-normal h-4">
                           {act.type.replace('_', ' ')}
                         </Badge>
+                        {act.channel && (
+                          <Badge variant="secondary" className="text-[10px] font-normal h-4">
+                            {act.channel}
+                          </Badge>
+                        )}
                         <span className="font-medium text-xs text-foreground">{act.title}</span>
                       </div>
                       <span className="text-[10px] text-muted-foreground font-mono">
@@ -532,11 +603,11 @@ export default function LeadDetailPage() {
                     )}
 
                     {act.imageUrl && (
-                      <div className="mt-2 rounded border border-border overflow-hidden max-w-sm">
+                      <div className="mt-2 rounded border border-border overflow-hidden">
                         <img
                           src={act.imageUrl}
                           alt="Screenshot"
-                          className="w-full h-auto object-cover max-h-40"
+                          className="w-full h-auto object-contain"
                         />
                       </div>
                     )}

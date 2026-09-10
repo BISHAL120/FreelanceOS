@@ -18,6 +18,7 @@ import {
   Kanban,
   Table as TableIcon,
   Sparkles,
+  GripVertical,
 } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -51,6 +52,191 @@ export const STAGES: { key: LeadStage; label: string }[] = [
   { key: 'LOST', label: 'Lost' },
 ]
 
+function LeadCardPreview({ lead, targetIndex, stageLabel }: { lead: Lead; targetIndex: number; stageLabel: string }) {
+  return (
+    <div
+      data-kanban-preview="true"
+      className="p-3 rounded-md border-2 border-dashed border-primary bg-primary/5 dark:bg-primary/10 shadow-sm ring-2 ring-primary/20 space-y-2 transition-all duration-150 relative overflow-hidden pointer-events-none select-none animate-in fade-in-50 zoom-in-95"
+    >
+      <div className="flex items-center justify-between pb-1.5 border-b border-primary/25 text-[10px] font-mono text-primary font-medium">
+        <span className="flex items-center gap-1.5">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+          </span>
+          <span className="font-semibold uppercase tracking-wider text-[10px]">Drop Slot</span>
+        </span>
+        <Badge
+          variant="outline"
+          className="text-[9px] h-4 px-1.5 border-primary/50 bg-primary/15 text-primary font-mono font-semibold"
+        >
+          Position #{targetIndex + 1}
+        </Badge>
+      </div>
+
+      <div className="flex items-start justify-between gap-1">
+        <div className="min-w-0 flex-1">
+          <h3 className="font-medium text-xs text-foreground truncate">{lead.name}</h3>
+          {lead.company && (
+            <p className="text-[11px] text-muted-foreground truncate mt-0.5">{lead.company}</p>
+          )}
+        </div>
+        <span className="font-mono text-xs font-semibold text-primary shrink-0">
+          ${lead.dealValue.toLocaleString()}
+        </span>
+      </div>
+
+      <div className="flex items-center justify-between gap-1 text-[10px] text-muted-foreground pt-1 border-t border-primary/20">
+        <span>{lead.assignedToName || 'Unassigned'}</span>
+        {lead.nextFollowUp && (
+          <span className="font-mono">
+            {new Date(lead.nextFollowUp).toLocaleDateString([], { month: 'numeric', day: 'numeric' })}
+          </span>
+        )}
+      </div>
+
+      <div className="text-[9px] font-mono text-primary/80 italic text-center pt-0.5">
+        Release to move to {stageLabel}
+      </div>
+    </div>
+  )
+}
+
+function LeadCardFaded({ lead, index }: { lead: Lead; index: number }) {
+  return (
+    <div
+      data-kanban-faded="true"
+      className="p-3 rounded-md border-2 border-dashed border-primary/40 bg-muted/30 opacity-40 grayscale-[25%] scale-[0.98] transition-all space-y-2 relative pointer-events-none select-none"
+    >
+      <div className="flex items-center justify-between pb-1 border-b border-border/40 text-[9px] font-mono text-muted-foreground">
+        <span className="flex items-center gap-1.5 italic font-medium">
+          <span className="h-1.5 w-1.5 rounded-full bg-primary/70 animate-pulse" />
+          Original position (Moving...)
+        </span>
+        <span className="text-[9px] font-mono opacity-70">#{index + 1}</span>
+      </div>
+
+      <div className="flex items-start justify-between gap-1">
+        <div className="min-w-0 flex-1">
+          <h3 className="font-medium text-xs text-muted-foreground truncate">{lead.name}</h3>
+          {lead.company && (
+            <p className="text-[11px] text-muted-foreground/70 truncate mt-0.5">{lead.company}</p>
+          )}
+        </div>
+        <span className="font-mono text-xs text-muted-foreground/70 shrink-0">
+          ${lead.dealValue.toLocaleString()}
+        </span>
+      </div>
+    </div>
+  )
+}
+
+function LeadCard({
+  lead,
+  index,
+  onDragStart,
+  onDragEnd,
+  onClick,
+  onShiftPrev,
+  onShiftNext,
+  onConvert,
+}: {
+  lead: Lead
+  index: number
+  onDragStart: (e: React.DragEvent) => void
+  onDragEnd: () => void
+  onClick: () => void
+  onShiftPrev: () => void
+  onShiftNext: () => void
+  onConvert: () => void
+}) {
+  const isOverdue = lead.nextFollowUp && new Date(lead.nextFollowUp).getTime() < Date.now()
+
+  return (
+    <div
+      data-kanban-card="true"
+      data-lead-id={lead.id}
+      draggable
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+      onClick={onClick}
+      className="p-3 rounded-md border bg-card hover:border-foreground/30 hover:shadow-xs transition cursor-grab active:cursor-grabbing space-y-2 group border-border"
+    >
+      {/* Top: Name, Grip & Deal Value */}
+      <div className="flex items-start justify-between gap-1">
+        <div className="min-w-0 flex-1">
+          <h3 className="font-medium text-xs text-foreground truncate group-hover:underline">
+            {lead.name}
+          </h3>
+          {lead.company && (
+            <p className="text-[11px] text-muted-foreground truncate mt-0.5">{lead.company}</p>
+          )}
+        </div>
+        <div className="flex items-center gap-1 shrink-0">
+          <span className="text-[10px] font-mono text-muted-foreground/50 font-semibold group-hover:text-muted-foreground">
+            #{index + 1}
+          </span>
+          <GripVertical className="h-3 w-3 text-muted-foreground/40 group-hover:text-muted-foreground shrink-0 cursor-grab" />
+          <span className="font-mono text-xs font-semibold text-foreground">
+            ${lead.dealValue.toLocaleString()}
+          </span>
+        </div>
+      </div>
+
+      {/* Notes */}
+      {lead.notes && (
+        <p className="text-[11px] text-muted-foreground line-clamp-2">{lead.notes}</p>
+      )}
+
+      {/* Metadata */}
+      <div className="flex items-center justify-between gap-1 text-[10px] text-muted-foreground pt-1 border-t border-border/50">
+        <span>{lead.assignedToName || 'Unassigned'}</span>
+        {lead.nextFollowUp && (
+          <span className={`font-mono ${isOverdue ? 'text-destructive font-medium' : ''}`}>
+            {new Date(lead.nextFollowUp).toLocaleDateString([], { month: 'numeric', day: 'numeric' })}
+          </span>
+        )}
+      </div>
+
+      {/* Quick Stage Controls */}
+      <div
+        className="pt-1.5 flex items-center justify-between text-xs"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center gap-1">
+          <button
+            onClick={onShiftPrev}
+            disabled={lead.stage === 'NEW'}
+            className="p-1 rounded hover:bg-muted text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:pointer-events-none transition"
+            title="Previous stage"
+          >
+            <ArrowLeft className="h-3 w-3" />
+          </button>
+          <button
+            onClick={onShiftNext}
+            disabled={lead.stage === 'LOST'}
+            className="p-1 rounded hover:bg-muted text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:pointer-events-none transition"
+            title="Next stage"
+          >
+            <ArrowRight className="h-3 w-3" />
+          </button>
+        </div>
+
+        {lead.stage !== 'WON' ? (
+          <button
+            onClick={onConvert}
+            className="text-[10px] text-muted-foreground hover:text-foreground hover:underline"
+          >
+            Convert
+          </button>
+        ) : (
+          <span className="text-[10px] text-muted-foreground font-medium">Won ✓</span>
+        )}
+      </div>
+    </div>
+  )
+}
+
 export default function LeadsPage() {
   const router = useRouter()
   const { currentUser, users, isAdmin, isLeadGen } = useAuth()
@@ -66,6 +252,16 @@ export default function LeadsPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [stageFilter, setStageFilter] = useState<string>('ALL')
   const [ownerFilter, setOwnerFilter] = useState<string>('ALL')
+
+  // Drag & Drop state
+  const [draggedLeadId, setDraggedLeadId] = useState<string | null>(null)
+  const [dragOverStage, setDragOverStage] = useState<LeadStage | null>(null)
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
+
+  const draggedLead = useMemo(
+    () => leads.find((l) => l.id === draggedLeadId) || null,
+    [leads, draggedLeadId]
+  )
 
   // New lead form states
   const [name, setName] = useState('')
@@ -165,6 +361,90 @@ export default function LeadsPage() {
       }
     } catch {
       // ignore
+    }
+  }
+
+  // Drag & Drop handlers
+  const handleDragStart = (e: React.DragEvent, leadId: string) => {
+    e.dataTransfer.setData('text/plain', leadId)
+    e.dataTransfer.effectAllowed = 'move'
+    requestAnimationFrame(() => setDraggedLeadId(leadId))
+  }
+
+  const handleDragEnd = () => {
+    setDraggedLeadId(null)
+    setDragOverStage(null)
+    setDragOverIndex(null)
+  }
+
+  const handleContainerDragOver = (e: React.DragEvent, stage: LeadStage) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+
+    if (dragOverStage !== stage) {
+      setDragOverStage(stage)
+    }
+
+    const container = e.currentTarget as HTMLElement
+    const cards = Array.from(
+      container.querySelectorAll<HTMLElement>('[data-kanban-card="true"]')
+    )
+
+    if (cards.length === 0) {
+      if (dragOverIndex !== 0) setDragOverIndex(0)
+      return
+    }
+
+    let calculatedIndex = cards.length
+    for (let i = 0; i < cards.length; i++) {
+      const rect = cards[i].getBoundingClientRect()
+      const midY = rect.top + rect.height / 2
+      if (e.clientY < midY) {
+        calculatedIndex = i
+        break
+      }
+    }
+
+    if (dragOverIndex !== calculatedIndex) {
+      setDragOverIndex(calculatedIndex)
+    }
+  }
+
+  const handleDrop = async (e: React.DragEvent, stage: LeadStage) => {
+    e.preventDefault()
+    const leadId = e.dataTransfer.getData('text/plain') || draggedLeadId
+    const targetIdx = dragOverIndex !== null ? dragOverIndex : 0
+
+    setDraggedLeadId(null)
+    setDragOverStage(null)
+    setDragOverIndex(null)
+
+    if (!leadId) return
+
+    // Optimistic local update
+    setLeads((prev) => {
+      const lead = prev.find((l) => l.id === leadId)
+      if (!lead) return prev
+      if (lead.stage === stage) return prev
+
+      const updatedLead: Lead = { ...lead, stage }
+      const remaining = prev.filter((l) => l.id !== leadId)
+      const targetLeads = remaining.filter((l) => l.stage === stage)
+      const boundedIdx = Math.max(0, Math.min(targetIdx, targetLeads.length))
+      targetLeads.splice(boundedIdx, 0, updatedLead)
+
+      return [...remaining.filter((l) => l.stage !== stage), ...targetLeads]
+    })
+
+    try {
+      await fetch(`/api/leads/${leadId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ stage }),
+      })
+      fetchLeads()
+    } catch {
+      fetchLeads()
     }
   }
 
@@ -357,16 +637,44 @@ export default function LeadsPage() {
           {STAGES.map((stageItem) => {
             const stageLeads = filteredLeads.filter((l) => l.stage === stageItem.key)
             const stageTotal = stageLeads.reduce((acc, l) => acc + l.dealValue, 0)
+            const isDropTarget = dragOverStage === stageItem.key
+            const otherLeads = stageLeads.filter((l) => l.id !== draggedLeadId)
+            const targetIdx = Math.max(0, Math.min(dragOverIndex ?? 0, otherLeads.length))
 
             return (
               <div
                 key={stageItem.key}
-                className="w-[85vw] sm:w-[280px] min-w-[85vw] sm:min-w-[280px] max-w-[320px] sm:max-w-[280px] shrink-0 snap-center flex flex-col rounded-lg border border-border bg-muted/20"
+                onDragLeave={(e) => {
+                  if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                    if (dragOverStage === stageItem.key) {
+                      setDragOverStage(null)
+                      setDragOverIndex(null)
+                    }
+                  }
+                }}
+                className={`shrink-0 flex flex-col rounded-lg border transition-all ${
+                  isDropTarget
+                    ? 'border-primary/50 bg-primary/5 shadow-xs ring-1 ring-primary/20'
+                    : 'border-border bg-muted/20'
+                } w-[85vw] sm:w-[280px] min-w-[85vw] sm:min-w-[280px] max-w-[320px] sm:max-w-[280px] snap-center`}
               >
-                {/* Column Header - Clean, No Thick Rainbow Borders */}
-                <div className="p-3 border-b border-border bg-card/50 flex items-center justify-between">
+                {/* Column Header */}
+                <div
+                  onDragOver={(e) => {
+                    e.preventDefault()
+                    e.dataTransfer.dropEffect = 'move'
+                    if (dragOverStage !== stageItem.key) setDragOverStage(stageItem.key)
+                    if (dragOverIndex !== 0) setDragOverIndex(0)
+                  }}
+                  onDrop={(e) => handleDrop(e, stageItem.key)}
+                  className="p-3 border-b border-border bg-card/50 flex items-center justify-between rounded-t-lg"
+                >
                   <div className="flex items-center gap-1.5">
-                    <span className="h-1.5 w-1.5 rounded-full bg-foreground/50" />
+                    <span
+                      className={`h-1.5 w-1.5 rounded-full transition-colors ${
+                        isDropTarget ? 'bg-primary animate-pulse' : 'bg-foreground/50'
+                      }`}
+                    />
                     <span className="font-medium text-xs text-foreground">
                       {stageItem.label}
                     </span>
@@ -379,95 +687,61 @@ export default function LeadsPage() {
                   </span>
                 </div>
 
-                {/* Lead Cards List */}
-                <div className="p-2 space-y-2 flex-1 max-h-[calc(100vh-390px)] overflow-y-auto">
-                  {stageLeads.length === 0 ? (
-                    <div className="p-6 text-center text-xs text-muted-foreground/60">
+                {/* Card Droppable Container */}
+                <div
+                  onDragOver={(e) => handleContainerDragOver(e, stageItem.key)}
+                  onDrop={(e) => handleDrop(e, stageItem.key)}
+                  className="p-2 space-y-2 flex-1 max-h-[calc(100vh-390px)] overflow-y-auto min-h-[140px]"
+                >
+                  {isDropTarget && draggedLead ? (
+                    otherLeads.length === 0 ? (
+                      <LeadCardPreview lead={draggedLead} targetIndex={0} stageLabel={stageItem.label} />
+                    ) : (
+                      Array.from({ length: otherLeads.length + 1 }).map((_, slotIdx) => (
+                        <React.Fragment key={`slot-${slotIdx}`}>
+                          {targetIdx === slotIdx && (
+                            <LeadCardPreview
+                              lead={draggedLead}
+                              targetIndex={slotIdx}
+                              stageLabel={stageItem.label}
+                            />
+                          )}
+                          {slotIdx < otherLeads.length && (
+                            <LeadCard
+                              lead={otherLeads[slotIdx]}
+                              index={slotIdx >= targetIdx ? slotIdx + 1 : slotIdx}
+                              onDragStart={(e) => handleDragStart(e, otherLeads[slotIdx].id)}
+                              onDragEnd={handleDragEnd}
+                              onClick={() => router.push(`/leads/${otherLeads[slotIdx].id}`)}
+                              onShiftPrev={() => advanceStage(otherLeads[slotIdx], 'prev')}
+                              onShiftNext={() => advanceStage(otherLeads[slotIdx], 'next')}
+                              onConvert={() => convertToClient(otherLeads[slotIdx].id)}
+                            />
+                          )}
+                        </React.Fragment>
+                      ))
+                    )
+                  ) : stageLeads.length === 0 ? (
+                    <div className="h-28 border border-dashed border-border/60 rounded-md flex flex-col items-center justify-center text-center p-3 text-xs text-muted-foreground/60">
                       No leads
                     </div>
                   ) : (
-                    stageLeads.map((lead) => {
-                      const isOverdue =
-                        lead.nextFollowUp &&
-                        new Date(lead.nextFollowUp).getTime() < Date.now()
-
+                    stageLeads.map((lead, idx) => {
+                      if (lead.id === draggedLeadId) {
+                        return <LeadCardFaded key={lead.id} lead={lead} index={idx} />
+                      }
                       return (
-                        <div
+                        <LeadCard
                           key={lead.id}
+                          lead={lead}
+                          index={idx}
+                          onDragStart={(e) => handleDragStart(e, lead.id)}
+                          onDragEnd={handleDragEnd}
                           onClick={() => router.push(`/leads/${lead.id}`)}
-                          className="p-3 rounded-md border border-border bg-card hover:border-foreground/25 hover:shadow-xs transition cursor-pointer space-y-2"
-                        >
-                          {/* Top: Name & Deal Value */}
-                          <div className="flex items-start justify-between gap-1">
-                            <div className="min-w-0 flex-1">
-                              <h3 className="font-medium text-xs text-foreground truncate hover:underline">
-                                {lead.name}
-                              </h3>
-                              {lead.company && (
-                                <p className="text-[11px] text-muted-foreground truncate mt-0.5">
-                                  {lead.company}
-                                </p>
-                              )}
-                            </div>
-                            <span className="font-mono text-xs font-semibold text-foreground shrink-0">
-                              ${lead.dealValue.toLocaleString()}
-                            </span>
-                          </div>
-
-                          {/* Notes */}
-                          {lead.notes && (
-                            <p className="text-[11px] text-muted-foreground line-clamp-2">
-                              {lead.notes}
-                            </p>
-                          )}
-
-                          {/* Metadata */}
-                          <div className="flex items-center justify-between gap-1 text-[10px] text-muted-foreground pt-1">
-                            <span>{lead.assignedToName || 'Unassigned'}</span>
-
-                            {lead.nextFollowUp && (
-                              <span className={`font-mono ${isOverdue ? 'text-destructive font-medium' : ''}`}>
-                                {new Date(lead.nextFollowUp).toLocaleDateString([], { month: 'numeric', day: 'numeric' })}
-                              </span>
-                            )}
-                          </div>
-
-                          {/* Quick Stage Controls */}
-                          <div
-                            className="pt-2 border-t border-border/60 flex items-center justify-between text-xs"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <div className="flex items-center gap-1">
-                              <button
-                                onClick={() => advanceStage(lead, 'prev')}
-                                className="p-1 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition"
-                                title="Previous stage"
-                              >
-                                <ArrowLeft className="h-3 w-3" />
-                              </button>
-                              <button
-                                onClick={() => advanceStage(lead, 'next')}
-                                className="p-1 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition"
-                                title="Next stage"
-                              >
-                                <ArrowRight className="h-3 w-3" />
-                              </button>
-                            </div>
-
-                            {lead.stage !== 'WON' ? (
-                              <button
-                                onClick={() => convertToClient(lead.id)}
-                                className="text-[10px] text-muted-foreground hover:text-foreground hover:underline"
-                              >
-                                Convert
-                              </button>
-                            ) : (
-                              <span className="text-[10px] text-muted-foreground font-medium">
-                                Won ✓
-                              </span>
-                            )}
-                          </div>
-                        </div>
+                          onShiftPrev={() => advanceStage(lead, 'prev')}
+                          onShiftNext={() => advanceStage(lead, 'next')}
+                          onConvert={() => convertToClient(lead.id)}
+                        />
                       )
                     })
                   )}
@@ -559,137 +833,184 @@ export default function LeadsPage() {
       {/* NEW PROSPECT DIALOG                                      */}
       {/* ======================================================== */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="w-[95vw] sm:max-w-md max-h-[90vh] overflow-y-auto p-4 sm:p-6">
-          <DialogHeader>
-            <DialogTitle className="text-base font-semibold">New Prospect</DialogTitle>
-            <DialogDescription className="text-xs">
-              Add a new lead to your sales pipeline.
-            </DialogDescription>
+        <DialogContent className="w-[95vw] sm:max-w-lg max-h-[90vh] overflow-y-auto p-4 sm:p-6">
+          <DialogHeader className="space-y-2">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                <UserIcon className="h-5 w-5" />
+              </div>
+              <div>
+                <DialogTitle className="text-base font-semibold normal-case tracking-normal leading-tight">
+                  Add New Lead
+                </DialogTitle>
+                <DialogDescription className="text-xs">
+                  Capture a new prospect and drop it into your pipeline.
+                </DialogDescription>
+              </div>
+            </div>
           </DialogHeader>
 
-          <form onSubmit={handleCreateLead} className="space-y-3 pt-2">
-            <div className="grid grid-cols-2 gap-3">
+          <form onSubmit={handleCreateLead} className="space-y-5 pt-1">
+            {/* Contact Details */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="h-5 w-5 rounded bg-muted flex items-center justify-center text-muted-foreground">
+                  <UserIcon className="h-3 w-3" />
+                </span>
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Contact Details
+                </span>
+              </div>
+
               <div>
                 <label className="text-xs font-medium">Contact Name *</label>
                 <Input
-                  placeholder="Julian Ramirez"
+                  placeholder="e.g. Julian Ramirez"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="h-8 text-xs mt-1"
+                  className="h-9 text-xs mt-1"
                   required
                 />
               </div>
-              <div>
-                <label className="text-xs font-medium">Company</label>
-                <Input
-                  placeholder="Acme Corp"
-                  value={company}
-                  onChange={(e) => setCompany(e.target.value)}
-                  className="h-8 text-xs mt-1"
-                />
-              </div>
-            </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="text-xs font-medium">Email *</label>
-                <Input
-                  type="email"
-                  placeholder="julian@acme.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="h-8 text-xs mt-1"
-                  required
-                />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs font-medium">Company</label>
+                  <Input
+                    placeholder="Acme Corp"
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                    className="h-9 text-xs mt-1"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-medium">Email *</label>
+                  <Input
+                    type="email"
+                    placeholder="julian@acme.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="h-9 text-xs mt-1"
+                    required
+                  />
+                </div>
               </div>
+
               <div>
                 <label className="text-xs font-medium">Phone</label>
                 <Input
                   placeholder="+1 (555) 000-0000"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="h-8 text-xs mt-1"
+                  className="h-9 text-xs mt-1"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="text-xs font-medium">Deal Value ($) *</label>
-                <Input
-                  type="number"
-                  placeholder="5000"
-                  value={dealValue}
-                  onChange={(e) => setDealValue(e.target.value)}
-                  className="h-8 text-xs mt-1 font-mono"
-                  required
-                />
+            {/* Deal Details */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="h-5 w-5 rounded bg-muted flex items-center justify-center text-muted-foreground">
+                  <DollarSign className="h-3 w-3" />
+                </span>
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Deal Details
+                </span>
               </div>
-              <div>
-                <label className="text-xs font-medium">Stage</label>
-                <Select value={stage} onValueChange={(val) => val && setStage(val as LeadStage)}>
-                  <SelectTrigger className="h-8 text-xs mt-1">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {STAGES.map((s) => (
-                      <SelectItem key={s.key} value={s.key} className="text-xs">
-                        {s.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs font-medium">Deal Value ($) *</label>
+                  <Input
+                    type="number"
+                    placeholder="5000"
+                    value={dealValue}
+                    onChange={(e) => setDealValue(e.target.value)}
+                    className="h-9 text-xs mt-1 font-mono"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-medium">Stage</label>
+                  <Select value={stage} onValueChange={(val) => val && setStage(val as LeadStage)}>
+                    <SelectTrigger className="h-9 text-xs mt-1">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {STAGES.map((s) => (
+                        <SelectItem key={s.key} value={s.key} className="text-xs">
+                          {s.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs font-medium">Source</label>
+                  <Select value={source} onValueChange={(val) => val && setSource(val)}>
+                    <SelectTrigger className="h-9 text-xs mt-1">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Referral" className="text-xs">Referral</SelectItem>
+                      <SelectItem value="LinkedIn" className="text-xs">LinkedIn</SelectItem>
+                      <SelectItem value="Website" className="text-xs">Website</SelectItem>
+                      <SelectItem value="Upwork" className="text-xs">Upwork</SelectItem>
+                      <SelectItem value="Cold Outreach" className="text-xs">Cold Outreach</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <label className="text-xs font-medium">Owner</label>
+                  <Select value={assignedToId} onValueChange={(val) => val && setAssignedToId(val)}>
+                    <SelectTrigger className="h-9 text-xs mt-1">
+                      <SelectValue placeholder="Select member" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {users.map((u) => (
+                        <SelectItem key={u.id} value={u.id} className="text-xs">
+                          {u.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="text-xs font-medium">Source</label>
-                <Select value={source} onValueChange={(val) => val && setSource(val)}>
-                  <SelectTrigger className="h-8 text-xs mt-1">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Referral" className="text-xs">Referral</SelectItem>
-                    <SelectItem value="LinkedIn" className="text-xs">LinkedIn</SelectItem>
-                    <SelectItem value="Website" className="text-xs">Website</SelectItem>
-                    <SelectItem value="Upwork" className="text-xs">Upwork</SelectItem>
-                    <SelectItem value="Cold Outreach" className="text-xs">Cold Outreach</SelectItem>
-                  </SelectContent>
-                </Select>
+            {/* Notes */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="h-5 w-5 rounded bg-muted flex items-center justify-center text-muted-foreground">
+                  <Sparkles className="h-3 w-3" />
+                </span>
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Notes
+                </span>
               </div>
-              <div>
-                <label className="text-xs font-medium">Owner</label>
-                <Select value={assignedToId} onValueChange={(val) => val && setAssignedToId(val)}>
-                  <SelectTrigger className="h-8 text-xs mt-1">
-                    <SelectValue placeholder="Select member" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {users.map((u) => (
-                      <SelectItem key={u.id} value={u.id} className="text-xs">
-                        {u.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            <div>
-              <label className="text-xs font-medium">Notes</label>
               <Textarea
-                placeholder="Initial prospect details..."
+                placeholder="Initial context, budget signals, or next steps..."
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                className="text-xs mt-1 min-h-[50px]"
+                className="text-xs mt-1 min-h-[70px]"
               />
             </div>
 
-            <div className="flex justify-end gap-2 pt-2">
-              <Button type="button" variant="outline" size="sm" onClick={() => setDialogOpen(false)} className="text-xs">
+            <div className="flex items-center justify-end gap-2 border-t border-border pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setDialogOpen(false)}
+                className="text-xs h-8"
+              >
                 Cancel
               </Button>
-              <Button type="submit" size="sm" disabled={submitting} className="text-xs">
+              <Button type="submit" size="sm" disabled={submitting} className="text-xs h-8 gap-1.5">
+                <Plus className="h-3.5 w-3.5" />
                 {submitting ? 'Adding...' : 'Add Lead'}
               </Button>
             </div>
